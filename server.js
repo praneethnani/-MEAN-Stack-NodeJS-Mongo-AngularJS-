@@ -24,4 +24,21 @@ app.post("/AuthenticateUser", function (req, res) {
 	
 });
 
+app.get("/RegisterUser", function (req, res) {
+  	console.log("called get");
+  	//console.log(req + "Request");
+  	//res.write("Hello")
+});
+
+
+
+app.post("/RegisterUser", function (req, res) {
+  	console.log("http post called");
+  	var fname = req.body.fname;
+  	
+  	// code to validate email and password 
+  	res.json({name: " " + fname});
+	
+});
+
 app.listen(3000);

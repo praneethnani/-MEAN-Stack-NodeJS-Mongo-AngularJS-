@@ -19,3 +19,16 @@ ngIdpControllers.controller('HomepageCtrl', ['$scope', function ($scope, $http) 
 	console.log("Hello from HomepageCtrl");
 
 }]);
+
+ngIdpControllers.controller('registrationCtrl', ['$scope','DataFactory', function ($scope, DataFactory) {
+	console.log("Hello from registrationCtrl");
+
+	$scope.registerUser = function () {
+		
+		DataFactory.checkPost("/RegisterUser", $scope.register)
+        		 	.success(function(json){
+        		 		console.log("success called" + json.name);
+        		 		location.replace("http://localhost:3000/" + "#homePage?name="+json.name);  
+        	});
+	}
+}]);

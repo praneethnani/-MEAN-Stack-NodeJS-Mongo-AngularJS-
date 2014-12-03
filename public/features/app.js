@@ -20,6 +20,10 @@ ngIdpApp.config(['$routeProvider',
         templateUrl: 'templates/SignIn.html',
         controller: 'SignInCtrl'
       });
+      when('/registerUser', {
+        templateUrl: 'templates/Registeration.html',
+        controller: 'registrationCtrl'
+      });
       // .
       // otherwise({
       //   redirectTo: '/'
