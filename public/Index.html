@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html ng-app="ngIdpApp">
+	<head>
+		<meta charset="UTF-8">
+		<title>IDP Shop</title>
+		<link href="css/bootstrap.css" rel="stylesheet"/>
+		<!-- <link href="css/SignIn.css" rel="stylesheet"/> -->
+		<script src="bower_components/angular/angular.js"></script>
+        <script src="bower_components/angular-route/angular-route.js"></script>
+        <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+        <script src="bower_components/angular-resource/angular-resource.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+        <script src="features/app.js"></script>
+        <script src="features/controllers.js"></script>
+        <script src="features/services.js"></script>
+        <script src="features/directives.js"></script>
+	</head>
+<body id="appFrame" style="background-color: #eee">
+ 	<div class="container main-container" style="">
+        <li><a href="#signIn"> Login </a></li>
+      <div ng-view></div>
+
+    </div> <!-- /container -->
+     
+</body>
+</html>
