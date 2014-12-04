@@ -30,8 +30,6 @@ app.get("/RegisterUser", function (req, res) {
   	//res.write("Hello")
 });
 
-
-
 app.post("/RegisterUser", function (req, res) {
   	console.log("http post called");
   	var fname = req.body.fname;
