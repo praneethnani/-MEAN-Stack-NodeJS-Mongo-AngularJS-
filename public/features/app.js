@@ -16,7 +16,7 @@ ngIdpApp.config(['$routeProvider',
         templateUrl: 'templates/Homepage.html',
         controller: 'HomepageCtrl'
       }).
-      when('/signIn', {
+      when('/', {
         templateUrl: 'templates/SignIn.html',
         controller: 'SignInCtrl'
       }).

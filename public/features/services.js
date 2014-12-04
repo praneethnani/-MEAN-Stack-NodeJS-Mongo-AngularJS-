@@ -10,7 +10,6 @@ ngIdpServices.factory('DataFactory', function($http){
 			//return $http.get(JSONUrl);
 			return $http.post(Url, sl);
 		}
-
 	}
             
 });
