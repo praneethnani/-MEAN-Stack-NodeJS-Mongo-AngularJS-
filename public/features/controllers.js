@@ -21,15 +21,24 @@ ngIdpControllers.controller('HomepageCtrl', ['$scope','DataFactory', function ($
 function _cb_findItemsByKeywords(root) {
   var items = root.findItemsByKeywordsResponse[0].searchResult[0].item || [];
   var html = [];
-  html.push('<table width="100%" border="0" cellspacing="0" cellpadding="3"><tbody>');
+  html.push('<table width="100%" border="0" cellspacing="0" cellpadding="10" class="table table-hover"><tbody>');
   for (var i = 0; i < items.length; ++i) {
     var item     = items[i];
     var title    = item.title;
     var pic      = item.galleryURL;
     var viewitem = item.viewItemURL;
+    var price = item.sellingStatus[0].convertedCurrentPrice[0].__value__;
+    if(null == item.productId)
+    {
+    	continue;
+    }
+    var productId = item.productId[0].__value__;
+    var idType = item.productId[0];
+        
     if (null != title && null != viewitem) {
-      html.push('<tr><td>' + '<img src="' + pic + '" border="0">' + '</td>' + 
-      '<td><a href="' + viewitem + '" target="_blank">' + title + '</a></td></tr>');
+      html.push('<tr><td>' + '<img class="icon" src="' + pic + '" border="0">' + '</td>' + 
+      '<td><td><a href="http://localhost:3000/#productDetail?id='+ productId+'" target="_blank">' + title + '</a></td>'+
+      '<td>' + price + ' USD</td></tr>');
     }
   }
   html.push('</tbody></table>');
@@ -37,7 +46,7 @@ function _cb_findItemsByKeywords(root) {
 }  // End _cb_findItemsByKeywords() function
 
 $scope.searchFromEbay = function () {
-	console.log("Hello from searchFromEbay");
+	
 	var keyword = "&keywords=";
 	keyword += $scope.keyword;
 	keyword += "+";
@@ -47,6 +56,7 @@ $scope.searchFromEbay = function () {
 	ebayUrl += "?OPERATION-NAME=findItemsByKeywords";
 	ebayUrl += "&SECURITY-APPNAME=Northeas-38b6-48bd-bdd2-434822ab9fe8";
 	ebayUrl += "&RESPONSE-DATA-FORMAT=JSONP";
+	ebayUrl += "&REST-PAYLOAD&";
 	ebayUrl += keyword;
 	ebayUrl += "&paginationInput.entriesPerPage=20";
 	console.log(ebayUrl);
@@ -65,14 +75,13 @@ $scope.searchFromEbay = function () {
 }]);
 
 ngIdpControllers.controller('registrationCtrl', ['$scope','DataFactory', function ($scope, DataFactory) {
-	console.log("Hello from registrationCtrl");
 
 	$scope.registerUser = function () {
 		
 		DataFactory.checkPost("/RegisterUser", $scope.register)
 		.success(function(json){
-			console.log("success called" + json.name);
-			location.replace("http://localhost:3000/" + "#homePage?name="+json.name);  
+			
+			location.replace("http://localhost:3000/" + "#homePage");  
 		});
 	}
 }]);

@@ -24,9 +24,5 @@ ngIdpApp.config(['$routeProvider',
         templateUrl: 'templates/Registeration.html',
         controller: 'registrationCtrl'
       });
-      // .
-      // otherwise({
-      //   redirectTo: '/'
-      // });
-      console.log("routeProvider: "+ $routeProvider);
+    console.log("routeProvider: "+ $routeProvider);
   }]);
