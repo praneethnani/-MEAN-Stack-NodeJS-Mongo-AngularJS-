@@ -4,7 +4,7 @@
 
 	<div class="container" ng-controller="registrationCtrl">
 
-      <form class="form-registeration" role="form" ng-submit="registerUser()">>
+      <form class="form-registeration" role="form" ng-submit="registerUser()">
         <h2 class="form-registeration-heading">Please Register</h2>
         <label for="inputFirstName" class="sr-only">First Name</label>
         <input type="text" id="inputFirstName" class="form-control" placeholder="First Name" required autofocus ng-model="register.fname">
@@ -12,14 +12,11 @@
         <label for="inputLastName" class="sr-only">Last Name</label>
         <input type="text" id="inputDOB" class="form-control" placeholder="Last Name" required autofocus ng-model="register.lname">
         <br>
-        <label for="inputDOB" class="sr-only">Date Of Birth</label>
-        <input type="date" id="inputLastName" class="form-control" placeholder="Date Of Birth" required autofocus ng-model="register.dob">
-        <br>
         <label for="inputUsername" class="sr-only">Username</label>
         <input type="text" id="inputUsername" class="form-control" placeholder="Username" required autofocus ng-model="register.uname">
         <br>
         <label for="inputPassword" class="sr-only">Password</label>
-        <input type="password" id="inputPassword" class="form-control" placeholder="Password" required ng-model="password">
+        <input type="password" id="inputPassword" class="form-control" placeholder="Password" required ng-model="register.password">
         <br>
         <button class="btn btn-lg btn-primary btn-block" type="submit" >Register</button>
       </form>

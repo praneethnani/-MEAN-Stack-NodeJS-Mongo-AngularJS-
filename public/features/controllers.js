@@ -9,8 +9,15 @@ ngIdpControllers.controller('SignInCtrl', ['$scope','DataFactory', function ($sc
 		
 		DataFactory.checkPost("/AuthenticateUser", $scope.login)
 		.success(function(json){
-			console.log("success called" + json.name);
-			location.replace("http://localhost:3000/" + "#homePage?name="+json.name);  
+		
+				
+	if (json!="success"){
+		alert(json);
+
+	}else{
+				location.replace("http://localhost:3000/" + "#homePage");
+
+				}
 		});
 	}
 }]);
@@ -37,7 +44,7 @@ function _cb_findItemsByKeywords(root) {
         
     if (null != title && null != viewitem) {
       html.push('<tr><td>' + '<img class="icon" src="' + pic + '" border="0">' + '</td>' + 
-      '<td><td><a href="http://localhost:3000/#productDetail?id='+ productId+'" target="_blank">' + title + '</a></td>'+
+      '<td><td><a href="/#productDetail?id='+ productId+'" target="_blank">' + title + '</a></td>'+
       '<td>' + price + ' USD</td></tr>');
     }
   }
@@ -74,14 +81,22 @@ $scope.searchFromEbay = function () {
 
 }]);
 
+
+
+
 ngIdpControllers.controller('registrationCtrl', ['$scope','DataFactory', function ($scope, DataFactory) {
 
 	$scope.registerUser = function () {
 		
 		DataFactory.checkPost("/RegisterUser", $scope.register)
 		.success(function(json){
-			
+		if (json!="success"){
+		alert(json);
+	}else{
 			location.replace("http://localhost:3000/" + "#homePage");  
-		});
-	}
+		}
+	});
+}
 }]);
+
+
