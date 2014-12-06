@@ -1,0 +1,15 @@
+<div class="container" ng-controller="savedProductsCtrl">
+	<h1>Your Saved Products</h1>
+	<table class="table">
+		<tbody>
+			<tr ng-repeat="savedProduct in savedProducts">
+					<td ng-if="savedProduct.username == 'ishani'">
+						<a href="/#productDetail?id={{savedProduct.itemId}}">{{savedProduct.productTitle}}</a>
+					</td>
+					<td ng-if="savedProduct.username == 'ishani'">
+						<button ng-click="remove(savedProduct._id)" class="btn btn-danger">Remove</button>
+					</td>
+			</tr>
+		</tbody>
+	</table>
+</div>

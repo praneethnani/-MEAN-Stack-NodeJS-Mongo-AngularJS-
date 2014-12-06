@@ -19,7 +19,9 @@ ngIdpControllers.controller('SignInCtrl', ['$scope','DataFactory', function ($sc
 
 ngIdpControllers.controller('HomepageCtrl', ['$scope','DataFactory', function ($scope, DataFactory) {
 	console.log("Hello from HomepageCtrl");
-
+	var userName = DataFactory.getUserName("/username");
+	// It prints out json promise instead of username
+	console.log(userName);
 	function _cb_findItemsByKeywords(root) {
 		var items = root.findItemsByKeywordsResponse[0].searchResult[0].item || [];
 		var html = [];
@@ -102,3 +104,66 @@ ngIdpControllers.controller('productDetailCtrl', ['$scope','DataFactory', functi
 		});
 
 }]);
+
+ngIdpControllers.controller('commentCtrl', ['$scope', '$http', 'DataFactory', function ($scope, $http, DataFactory) {
+	console.log("Hello from commentCtrl");
+
+	$scope.renderComments = function (response) {
+		console.log(response);
+			$scope.comments = response;	
+	};
+
+	$scope.remove = function (id) {
+		DataFactory.deleteData("/comments/" + id)
+		.success(function(response){
+			$scope.all();
+		});
+	};
+
+	$scope.update = function (id) {
+		console.log($scope.comments);
+		DataFactory.putData("/comments/" + $scope.comment._id, $scope.comment)
+		.success(function(response){
+			$scope.all();
+		});
+	};
+
+	$scope.select = function (id) {
+		console.log(id);
+		DataFactory.selectData("/comments/" + id)
+		.success(function (response){
+			$scope.comment = response;
+		});
+	};
+
+	$scope.all = function (response) {
+		$http.get("/comments")
+	.success($scope.renderComments);
+	}
+	
+	$scope.all();
+}]);
+
+ngIdpControllers.controller('savedProductsCtrl', ['$scope', '$http', 'DataFactory', function ($scope, $http, DataFactory) {
+	console.log("Hello from savedProductsCtrl");
+	$scope.renderSavedProducts = function (response) {
+		console.log(response);
+			$scope.savedProducts = response;	
+	};
+
+	$scope.remove = function (id) {
+		DataFactory.deleteData("/savedProducts/" + id)
+		.success(function(response){
+			$scope.all();
+		});
+	};
+
+	$scope.all = function (response) {
+		$http.get("/savedProducts")
+	.success($scope.renderSavedProducts);
+	}
+	
+	$scope.all();
+
+}]);
+

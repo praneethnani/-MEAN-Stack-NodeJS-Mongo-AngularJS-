@@ -11,28 +11,26 @@ app.use(express.session({secret: '1234567890QWERTY'}));
 
 app.use(express.static(__dirname + '/public'));
 app.use(express.bodyParser());
-var connectionString = process.env.OPENSHIFT_MONGODB_DB_URL + "ebaydp" || "ebaydb";
+//var connectionString = process.env.OPENSHIFT_MONGODB_DB_URL + "ebaydp" || "ebaydb";
 
-var db = mongojs(connectionString, ["user"]);
+var dbUser = mongojs("dbms", ["user"]);
+var dbComments = mongojs("dbms", ["comments"]);
+var dbSavedProducts = mongojs("dbms", ["savedProducts"]);
 
 app.get("/AuthenticateUser", function (req, res) {
- console.log("called get");
-  	//console.log(req + "Request");
   	//res.write("Hello")
   });
 
 app.get("/username", function (req, res) {
- res.send(req.session.username);
-    //console.log(req + "Request");
+  res.send(req.session.username);
     //res.write("Hello")
   });
 
 app.post("/AuthenticateUser", function (req, res) {
- console.log("http post called");
  var uname = req.body.uname;
  var password = sha1(req.body.password);
 
- db.user.findOne({username:uname},function(err, results){
+ dbUser.user.findOne({username:uname},function(err, results){
   if (results !=null){
    json_password=results.password;
    if(password==json_password){
@@ -45,19 +43,19 @@ app.post("/AuthenticateUser", function (req, res) {
   res.send("username not found");
 }
 });
- 
- 
+
+
 });
 
 
 app.get('/users', function(req,res){
-  db.user.find(function(er,data){
+  dbUser.user.find(function(er,data){
     res.json(data)
   });
 });
 
 app.post('/RegisterUser', function(req,res){
- 
+
  var uname=req.body.uname
  var user={
   first:req.body.fname,
@@ -66,13 +64,13 @@ app.post('/RegisterUser', function(req,res){
   password:sha1(req.body.password)
 };
 
-db.user.findOne({username:uname},function(err, results){
+dbUser.user.findOne({username:uname},function(err, results){
 
   if(results !=null){
     res.send("username exists");
   }
   else{
-    db.user.insert(user,function(er,data){
+    dbUser.user.insert(user,function(er,data){
       req.session.username=uname
       res.send("success");
     });
@@ -84,11 +82,9 @@ db.user.findOne({username:uname},function(err, results){
 
 app.get("/EbayFetchByItemId/:Itemid", function (req, res) {
   var iid = req.params.Itemid;
-  console.log(iid);
 
   var Itemid = "ItemID=";
   Itemid += iid;
-  console.log(Itemid);
 
   var ebayUrl = "http://open.api.ebay.com/shopping?";
   ebayUrl += "callname=GetSingleItem&";
@@ -100,6 +96,55 @@ app.get("/EbayFetchByItemId/:Itemid", function (req, res) {
     res.json(body);
   });
 });
+
+app.get("/comments", function (req, res) {
+dbComments.comments.find(function(err, docs){
+      res.json(docs);
+    });
+});
+
+app.get("/comments/:id", function(req, res){
+  var id = req.params.id;
+  dbComments.comments.findOne({_id : mongojs.ObjectId(id)}, function (err, doc){
+    res.json(doc);
+  });
+});
+
+app.put("/comments/:id", function(req, res){
+  var id = req.params.id; 
+  dbComments.comments.findAndModify({
+    query: {_id : mongojs.ObjectId(id)}, 
+    update: {$set : {comment : req.body.comment}}},
+    function (err, doc, lastErrorObject) {
+      dbComments.comments.find(function(err, data){
+        res.json(doc);
+      });
+    });
+});
+
+app.delete("/comments/:id", function(req, res){
+  var id = req.params.id;
+  dbComments.comments.remove({_id : mongojs.ObjectId(id)}, 
+    function (err, doc) {
+      res.json(doc);
+    });
+});
+
+app.get("/savedProducts", function (req, res) {
+dbSavedProducts.savedProducts.find(function(err, docs){
+      res.json(docs);
+    });
+});
+
+app.delete("/savedProducts/:id", function(req, res){
+  var id = req.params.id;
+  dbSavedProducts.savedProducts.remove({_id : mongojs.ObjectId(id)}, 
+    function (err, doc) {
+      res.json(doc);
+    });
+});
+
+
 
 var ipaddress = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
 var port      = process.env.OPENSHIFT_NODEJS_PORT || 3000;

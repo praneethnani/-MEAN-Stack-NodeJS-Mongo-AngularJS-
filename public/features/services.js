@@ -11,6 +11,18 @@ ngIdpServices.factory('DataFactory', function($http){
 		},
 		fetchByItemId : function(Url){
 			return $http.get(Url);
+		},
+		getUserName : function(Url) {
+			return $http.get(Url);
+		},
+		deleteData : function(Url) {
+			return $http.delete(Url);
+		},
+		putData : function(Url, sc) {
+			return $http.put(Url, sc);
+		},
+		selectData : function(Url) {
+			return $http.get(Url);
 		}
 	}
             

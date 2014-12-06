@@ -27,6 +27,15 @@ ngIdpApp.config(['$routeProvider',
       when('/productDetail', {
         templateUrl: 'templates/ProductDetail.html',
         controller: 'productDetailCtrl'
+      }).
+      when('/comments', {
+        templateUrl: 'templates/Comments.html',
+        controller: 'commentCtrl'
+      }).
+      when('/savedProducts', {
+        templateUrl: 'templates/SavedProducts.html',
+        controller: 'savedProductsCtrl'
       });
+      
     console.log("routeProvider: "+ $routeProvider);
   }]);
