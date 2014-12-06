@@ -1,0 +1,30 @@
+
+<div class="container" >
+
+  <form role="form" ng-submit="searchFromEbayByProductID()" >
+    <h2 class="">Welcome to IDP Shop</h2>
+    <div class="row">
+      <div class="col-lg-6">
+        <div class="input-group">
+          <!-- <div class="input-group-btn">
+            <select type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false" ng-model="category"> <span class="caret"></span>
+              <option value="laptops" selected>Laptops</option>
+              <option value="desktops">Desktops</option>
+              <option value="mobilePhones">Mobile Phones</option>
+              <option value="tablets">Tablets</option>
+            </select>
+          </div> -->
+          <!-- /btn-group -->
+          <label>productId</label>
+          <input type="text" class="form-control" ng-model="item.itemId" required>
+        </div><!-- /input-group -->
+
+      </div><!-- /.row -->
+      <button class="btn btn-primary" type="submit">Search</button>
+      <div id="results">
+
+      </div>
+    </form>
+
+  </div> <!-- /container -->
+

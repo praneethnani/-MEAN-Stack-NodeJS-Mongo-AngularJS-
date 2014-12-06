@@ -7,8 +7,10 @@ ngIdpServices.factory('DataFactory', function($http){
 	
 	return {
 		checkPost : function(Url, sl){
-			//return $http.get(JSONUrl);
 			return $http.post(Url, sl);
+		},
+		fetchByItemId : function(Url){
+			return $http.get(Url);
 		}
 	}
             

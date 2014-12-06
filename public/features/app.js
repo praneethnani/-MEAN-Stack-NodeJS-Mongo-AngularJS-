@@ -23,6 +23,10 @@ ngIdpApp.config(['$routeProvider',
       when('/registerUser', {
         templateUrl: 'templates/Registeration.html',
         controller: 'registrationCtrl'
+      }).
+      when('/productDetail', {
+        templateUrl: 'templates/ProductDetail.html',
+        controller: 'productDetailCtrl'
       });
     console.log("routeProvider: "+ $routeProvider);
   }]);

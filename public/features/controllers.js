@@ -6,18 +6,13 @@ ngIdpControllers.controller('SignInCtrl', ['$scope','DataFactory', function ($sc
 	console.log("Hello from SignInCtrl");
 
 	$scope.validate = function () {
-		
 		DataFactory.checkPost("/AuthenticateUser", $scope.login)
 		.success(function(json){
-		
-				
-	if (json!="success"){
-		alert(json);
-
-	}else{
+			if (json!="success"){
+				alert(json);
+			}else{
 				location.replace("http://localhost:3000/" + "#homePage");
-
-				}
+			}
 		});
 	}
 }]);
@@ -25,31 +20,30 @@ ngIdpControllers.controller('SignInCtrl', ['$scope','DataFactory', function ($sc
 ngIdpControllers.controller('HomepageCtrl', ['$scope','DataFactory', function ($scope, DataFactory) {
 	console.log("Hello from HomepageCtrl");
 
-function _cb_findItemsByKeywords(root) {
-  var items = root.findItemsByKeywordsResponse[0].searchResult[0].item || [];
-  var html = [];
-  html.push('<table width="100%" border="0" cellspacing="0" cellpadding="10" class="table table-hover"><tbody>');
-  for (var i = 0; i < items.length; ++i) {
-    var item     = items[i];
-    var title    = item.title;
-    var pic      = item.galleryURL;
-    var viewitem = item.viewItemURL;
-    var price = item.sellingStatus[0].convertedCurrentPrice[0].__value__;
-    if(null == item.productId)
-    {
-    	continue;
-    }
-    var productId = item.productId[0].__value__;
-    var idType = item.productId[0];
-        
-    if (null != title && null != viewitem) {
-      html.push('<tr><td>' + '<img class="icon" src="' + pic + '" border="0">' + '</td>' + 
-      '<td><td><a href="/#productDetail?id='+ productId+'" target="_blank">' + title + '</a></td>'+
-      '<td>' + price + ' USD</td></tr>');
-    }
-  }
-  html.push('</tbody></table>');
-  document.getElementById("results").innerHTML = html.join("");
+	function _cb_findItemsByKeywords(root) {
+		var items = root.findItemsByKeywordsResponse[0].searchResult[0].item || [];
+		var html = [];
+		html.push('<table width="100%" border="0" cellspacing="0" cellpadding="10" class="table table-hover"><tbody>');
+		for (var i = 0; i < items.length; ++i) {
+			var item     = items[i];
+			var title    = item.title;
+			var pic      = item.galleryURL;
+			var viewitem = item.viewItemURL;
+			var price = item.sellingStatus[0].convertedCurrentPrice[0].__value__;
+			if(null == item.itemId)
+			{
+				continue;
+			}
+			var itemId = item.itemId;
+
+			if (null != title && null != viewitem) {
+				html.push('<tr><td>' + '<img class="icon" src="' + pic + '" border="0">' + '</td>' + 
+					'<td><td><a href="/#productDetail?id='+ itemId+'" target="_blank">' + title + '</a></td>'+
+					'<td>' + price + ' USD</td></tr>');
+			}
+		}
+		html.push('</tbody></table>');
+		document.getElementById("results").innerHTML = html.join("");
 }  // End _cb_findItemsByKeywords() function
 
 $scope.searchFromEbay = function () {
@@ -81,22 +75,30 @@ $scope.searchFromEbay = function () {
 
 }]);
 
-
-
-
 ngIdpControllers.controller('registrationCtrl', ['$scope','DataFactory', function ($scope, DataFactory) {
 
 	$scope.registerUser = function () {
-		
 		DataFactory.checkPost("/RegisterUser", $scope.register)
 		.success(function(json){
-		if (json!="success"){
-		alert(json);
-	}else{
-			location.replace("http://localhost:3000/" + "#homePage");  
-		}
-	});
-}
+			if (json!="success"){
+				alert(json);
+			}else{
+				location.replace("http://localhost:3000/" + "#homePage");  
+			}
+		});
+	}
 }]);
 
+ngIdpControllers.controller('productDetailCtrl', ['$scope','DataFactory', function ($scope, DataFactory) {
+	console.log("Hello from productDetailCtrl");
+	var url = document.URL;
+	var urlContents = url.split("=");
+	var ItemID = urlContents[1];
+	console.log(ItemID);
+	DataFactory.fetchByItemId("/EbayFetchByItemId/"+ ItemID)
+	.success(function(json){
+		console.log(json);
+			//location.replace("http://localhost:3000/" + "#homePage");
+		});
 
+}]);
