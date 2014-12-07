@@ -18,10 +18,12 @@ ngIdpControllers.controller('SignInCtrl', ['$scope','DataFactory', function ($sc
 }]);
 
 ngIdpControllers.controller('HomepageCtrl', ['$scope','DataFactory', function ($scope, DataFactory) {
-	console.log("Hello from HomepageCtrl");
-	var userName = DataFactory.getUserName("/username");
-	// It prints out json promise instead of username
-	console.log(userName);
+	 console.log("Hello from HomepageCtrl");
+	
+	DataFactory.getUserName("/username").success(function(json){
+		$scope.username = json;
+	});
+	
 	function _cb_findItemsByKeywords(root) {
 		var items = root.findItemsByKeywordsResponse[0].searchResult[0].item || [];
 		var html = [];
@@ -107,6 +109,11 @@ ngIdpControllers.controller('productDetailCtrl', ['$scope','DataFactory', functi
 
 ngIdpControllers.controller('commentCtrl', ['$scope', '$http', 'DataFactory', function ($scope, $http, DataFactory) {
 	console.log("Hello from commentCtrl");
+
+	DataFactory.getUserName("/username").success(function(json){
+		console.log(json);
+		$scope.username = json;
+	});
 
 	$scope.renderComments = function (response) {
 		console.log(response);

@@ -43,10 +43,7 @@ app.post("/AuthenticateUser", function (req, res) {
   res.send("username not found");
 }
 });
-
-
 });
-
 
 app.get('/users', function(req,res){
   dbUser.user.find(function(er,data){
@@ -98,7 +95,7 @@ app.get("/EbayFetchByItemId/:Itemid", function (req, res) {
 });
 
 app.get("/comments", function (req, res) {
-dbComments.comments.find(function(err, docs){
+dbComments.comments.find({username : req.session.username}, function(err, docs){
       res.json(docs);
     });
 });
@@ -131,7 +128,7 @@ app.delete("/comments/:id", function(req, res){
 });
 
 app.get("/savedProducts", function (req, res) {
-dbSavedProducts.savedProducts.find(function(err, docs){
+dbSavedProducts.savedProducts.find({username : req.session.username}, function(err, docs){
       res.json(docs);
     });
 });

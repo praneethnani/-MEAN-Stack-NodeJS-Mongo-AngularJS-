@@ -3,10 +3,10 @@
 	<table class="table">
 		<tbody>
 			<tr ng-repeat="savedProduct in savedProducts">
-					<td ng-if="savedProduct.username == 'ishani'">
+					<td>
 						<a href="/#productDetail?id={{savedProduct.itemId}}">{{savedProduct.productTitle}}</a>
 					</td>
-					<td ng-if="savedProduct.username == 'ishani'">
+					<td>
 						<button ng-click="remove(savedProduct._id)" class="btn btn-danger">Remove</button>
 					</td>
 			</tr>
