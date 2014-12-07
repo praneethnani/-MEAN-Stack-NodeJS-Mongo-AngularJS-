@@ -34,7 +34,8 @@ app.post("/AuthenticateUser", function (req, res) {
   if (results !=null){
    json_password=results.password;
    if(password==json_password){
-    req.session.username=uname
+    req.session.username=uname;
+    console.log(req.session.username);
     res.send("success");
   }else{
     res.send("password is incorrect")

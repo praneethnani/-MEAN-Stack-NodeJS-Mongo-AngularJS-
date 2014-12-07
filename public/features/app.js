@@ -7,7 +7,8 @@ var ngIdpApp = angular.module('ngIdpApp', [
   'ngIdpServices',
   'ngIdpControllers',
   'ngIdpDirectives',
-  'ngSanitize'
+  'ngSanitize',
+  'ngCookies'
 ]);
 ngIdpApp.config(['$routeProvider',
   function($routeProvider) {

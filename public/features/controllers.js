@@ -2,27 +2,50 @@
 
 var ngIdpControllers = angular.module('ngIdpControllers', []);
 
-ngIdpControllers.controller('SignInCtrl', ['$scope','DataFactory', function ($scope, DataFactory) {
-	console.log("Hello from SignInCtrl");
+// function showTopNavBar($scope, DataFactory) {
+// 	DataFactory.getUserName("/username").success(function(json){
+// 		if(json != ""){
+// 			var a = document.getElementById('tnavBar');
+// 			a.style.visibility = "visible";
+// 		}
+// 	});
+// };
 
+function showTopNavBar($scope, DataFactory, $cookieStore) {
+	var uname = $cookieStore.get('username');
+		if(uname != ""){
+			var a = document.getElementById('tnavBar');
+			a.style.visibility = "visible";
+		} else {
+			var a = document.getElementById('tnavBar');
+			a.style.visibility = "hidden";
+		}
+	
+};
+
+ngIdpControllers.controller('SignInCtrl', ['$scope','DataFactory', '$cookieStore', function ($scope, DataFactory, $cookieStore) {
+	console.log("Hello from SignInCtrl");
+	$cookieStore.put('username', '');
+	showTopNavBar($scope, DataFactory, $cookieStore);
 	$scope.validate = function () {
 		DataFactory.checkPost("/AuthenticateUser", $scope.login)
 		.success(function(json){
 			if (json!="success"){
 				alert(json);
 			}else{
+				var uname = $scope.login.uname;
+				$cookieStore.put('username', uname);
 				location.replace("http://localhost:3000/" + "#homePage");
 			}
 		});
 	}
 }]);
 
-ngIdpControllers.controller('HomepageCtrl', ['$scope','DataFactory', function ($scope, DataFactory) {
+ngIdpControllers.controller('HomepageCtrl', ['$scope','DataFactory', '$cookieStore', function ($scope, DataFactory, $cookieStore) {
 	console.log("Hello from HomepageCtrl");
-	
-	DataFactory.getUserName("/username").success(function(json){
-		$scope.username = json;
-	});
+	showTopNavBar($scope, DataFactory,$cookieStore);
+	var u = $cookieStore.get('username');
+	$scope.username = u;
 	
 	function _cb_findItemsByKeywords(root) {
 		var items = root.findItemsByKeywordsResponse[0].searchResult[0].item || [];
@@ -80,8 +103,8 @@ $scope.searchFromEbay = function () {
 
 }]);
 
-ngIdpControllers.controller('registrationCtrl', ['$scope','DataFactory', function ($scope, DataFactory) {
-
+ngIdpControllers.controller('registrationCtrl', ['$scope','DataFactory', '$cookieStore', function ($scope, DataFactory, $cookieStore) {
+	showTopNavBar($scope, DataFactory,$cookieStore);
 	$scope.registerUser = function () {
 		DataFactory.checkPost("/RegisterUser", $scope.register)
 		.success(function(json){
@@ -94,8 +117,9 @@ ngIdpControllers.controller('registrationCtrl', ['$scope','DataFactory', functio
 	}
 }]);
 
-ngIdpControllers.controller('productDetailCtrl', ['$scope','DataFactory', function ($scope, DataFactory) {
+ngIdpControllers.controller('productDetailCtrl', ['$scope','DataFactory', '$cookieStore', function ($scope, DataFactory, $cookieStore) {
 	console.log("Hello from productDetailCtrl");
+	showTopNavBar($scope, DataFactory,$cookieStore);
 	var url = document.URL;
 	var urlContents = url.split("=");
 	var ItemID = urlContents[1];
@@ -108,13 +132,15 @@ ngIdpControllers.controller('productDetailCtrl', ['$scope','DataFactory', functi
 
 }]);
 
-ngIdpControllers.controller('commentCtrl', ['$scope', '$http', 'DataFactory', function ($scope, $http, DataFactory) {
+ngIdpControllers.controller('commentCtrl', ['$scope', '$http', 'DataFactory','$cookieStore', function ($scope, $http, DataFactory,  $cookieStore) {
 	console.log("Hello from commentCtrl");
-
-	DataFactory.getUserName("/username").success(function(json){
-		console.log(json);
-		$scope.username = json;
-	});
+	showTopNavBar($scope, DataFactory,$cookieStore);
+	var u = $cookieStore.get('username');
+	$scope.username = u;
+	// DataFactory.getUserName("/username").success(function(json){
+	// 	console.log(json);
+	// 	$scope.username = json;
+	// });
 
 	$scope.renderComments = function (response) {
 		console.log(response);
@@ -152,8 +178,9 @@ ngIdpControllers.controller('commentCtrl', ['$scope', '$http', 'DataFactory', fu
 	$scope.all();
 }]);
 
-ngIdpControllers.controller('savedProductsCtrl', ['$scope', '$http', 'DataFactory', function ($scope, $http, DataFactory) {
+ngIdpControllers.controller('savedProductsCtrl', ['$scope', '$http', 'DataFactory','$cookieStore', function ($scope, $http, DataFactory,  $cookieStore) {
 	console.log("Hello from savedProductsCtrl");
+	showTopNavBar($scope, DataFactory,$cookieStore);
 	$scope.renderSavedProducts = function (response) {
 		console.log(response);
 		$scope.savedProducts = response;	
@@ -176,8 +203,11 @@ ngIdpControllers.controller('savedProductsCtrl', ['$scope', '$http', 'DataFactor
 }]);
 
 
-ngIdpControllers.controller('forgotPasswordCtrl', ['$scope', '$http', 'DataFactory', function ($scope, $http, DataFactory) {
+ngIdpControllers.controller('forgotPasswordCtrl', ['$scope', '$http', 'DataFactory','$cookieStore', function ($scope, $http, DataFactory,  $cookieStore) {
 	console.log("Hello from forgotPasswordCtrl");
+	// var a = document.getElementById('tnavBar');
+	// a.style.visibility = "hidden";
+	showTopNavBar($scope, DataFactory,$cookieStore);
 	$scope.forgotPassword = {
 		answer: false,
 		unameshow: true,
@@ -249,11 +279,11 @@ ngIdpControllers.controller('forgotPasswordCtrl', ['$scope', '$http', 'DataFacto
 					newPasswordAdded: $scope.newPassword
 				}
 
-			console.log($scope.forgotPassword);
-			DataFactory.putNewPwd("/updatePassword/" + $scope.dbId, $scope.forgotPassword)
-			.success(function(response){
-				location.replace("http://localhost:3000/" + "#passwordChange");
-			});
+				console.log($scope.forgotPassword);
+				DataFactory.putNewPwd("/updatePassword/" + $scope.dbId, $scope.forgotPassword)
+				.success(function(response){
+					location.replace("http://localhost:3000/" + "#passwordChange");
+				});
 
 			}
 			else {
