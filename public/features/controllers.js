@@ -18,7 +18,7 @@ ngIdpControllers.controller('SignInCtrl', ['$scope','DataFactory', function ($sc
 }]);
 
 ngIdpControllers.controller('HomepageCtrl', ['$scope','DataFactory', function ($scope, DataFactory) {
-	 console.log("Hello from HomepageCtrl");
+	console.log("Hello from HomepageCtrl");
 	
 	DataFactory.getUserName("/username").success(function(json){
 		$scope.username = json;
@@ -72,6 +72,7 @@ $scope.searchFromEbay = function () {
 		dataType: "jsonp",
 		crossDomain: true,
 		success: function(data){
+			console.log(data);
 			_cb_findItemsByKeywords(data);
 		}
 	});
@@ -117,7 +118,7 @@ ngIdpControllers.controller('commentCtrl', ['$scope', '$http', 'DataFactory', fu
 
 	$scope.renderComments = function (response) {
 		console.log(response);
-			$scope.comments = response;	
+		$scope.comments = response;	
 	};
 
 	$scope.remove = function (id) {
@@ -145,7 +146,7 @@ ngIdpControllers.controller('commentCtrl', ['$scope', '$http', 'DataFactory', fu
 
 	$scope.all = function (response) {
 		$http.get("/comments")
-	.success($scope.renderComments);
+		.success($scope.renderComments);
 	}
 	
 	$scope.all();
@@ -155,7 +156,7 @@ ngIdpControllers.controller('savedProductsCtrl', ['$scope', '$http', 'DataFactor
 	console.log("Hello from savedProductsCtrl");
 	$scope.renderSavedProducts = function (response) {
 		console.log(response);
-			$scope.savedProducts = response;	
+		$scope.savedProducts = response;	
 	};
 
 	$scope.remove = function (id) {
@@ -167,10 +168,103 @@ ngIdpControllers.controller('savedProductsCtrl', ['$scope', '$http', 'DataFactor
 
 	$scope.all = function (response) {
 		$http.get("/savedProducts")
-	.success($scope.renderSavedProducts);
+		.success($scope.renderSavedProducts);
 	}
 	
 	$scope.all();
 
 }]);
 
+
+ngIdpControllers.controller('forgotPasswordCtrl', ['$scope', '$http', 'DataFactory', function ($scope, $http, DataFactory) {
+	console.log("Hello from forgotPasswordCtrl");
+	$scope.forgotPassword = {
+		answer: false,
+		unameshow: true,
+		submit: true,
+		userNameText: true,
+		quesText: false,
+		btncontinue: false,
+		newPwd: false
+	};
+	$scope.getQuestion = function () {
+		DataFactory.getQuestion("/forgotPassword", $scope.forgotPassword)
+		.success(function(json){
+			console.log(json);
+			if(json[0]){
+				$scope.question = json[0].secQues;
+				$scope.dbanswer = json[0].answer;
+				$scope.dbId = json[0]._id;
+				$scope.forgotPassword = {
+					answer: true,
+					unameshow: false,
+					submit: false,
+					userNameText: false,
+					quesText: true,
+					btncontinue: true,
+					ques: true
+				}
+			}
+			else {
+				alert('Username doesnot exist');
+			}
+			
+		});
+
+		$scope.validateAnswer = function() {
+			console.log("Validate Answer");
+			var inputAnswer = $scope.answer;
+			var dbanswer = $scope.dbanswer;
+			console.log(inputAnswer+ " " + dbanswer);
+			if (dbanswer == inputAnswer) {
+				$scope.forgotPassword = {
+					answer: false,
+					quesText: false,
+					btncontinue: false,
+					ques: false,
+					updatePwdText: true,
+					newPwd: true,
+					btnupdate: true
+				}
+			}
+			else {
+				alert("Incorrect Answer");
+			}
+		}
+
+		$scope.updatePassword = function() {
+			console.log("updatePassword");
+			var inputAnswer = $scope.answer;
+			var dbanswer = $scope.dbanswer;
+			console.log(inputAnswer+ " " + dbanswer);
+			if (dbanswer == inputAnswer) {
+				$scope.forgotPassword = {
+					answer: false,
+					quesText: false,
+					btncontinue: false,
+					ques: false,
+					updatePwdText: true,
+					newPwd: true,
+					btnupdate: true,
+					newPasswordAdded: $scope.newPassword
+				}
+
+			console.log($scope.forgotPassword);
+			DataFactory.putNewPwd("/updatePassword/" + $scope.dbId, $scope.forgotPassword)
+			.success(function(response){
+				location.replace("http://localhost:3000/" + "#passwordChange");
+			});
+
+			}
+			else {
+				alert("Incorrect Answer");
+			}
+		}
+	}
+}]);
+
+ngIdpControllers.controller('reportCtrl', ['$scope', '$http', 'DataFactory', function ($scope, $http, DataFactory) {
+	console.log("Hello from reportCtrl");
+	
+
+}]);

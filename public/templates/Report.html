@@ -1,0 +1,26 @@
+<div class="container" ng-controller="reportCtrl">
+	<h1>Generate Report</h1>
+	<form role="form" ng-submit="generateReport()">
+		<div class="row">
+		<label class="radio-inline">
+          <input type="radio" name="report" ng-model="report.selection" value="product">Product Based Report
+        </label>
+        <label class="radio-inline">
+          <input type="radio" name="report" ng-model="report.selection" value="user">User Based Report
+        </label>
+		</div>
+		<br/>
+		<br/>
+		<div class="row">
+			<div class="form-group">
+    			<label for="searchKey" class="col-sm-2 control-label">Enter Username/ItemID</label>
+    			<div class="col-sm-10">
+      				<input type="text" class="form-control" id="searchKey" placeholder="Username or Item Id" ng-model="report.searchKey">
+    			</div>
+ 		 	</div>
+		</div>
+		<br/>
+		<br/>
+		<button class="btn btn-lg btn-primary btn-block" type="submit" >Generate Report</button>
+	</form>
+</div>

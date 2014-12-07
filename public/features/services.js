@@ -23,6 +23,13 @@ ngIdpServices.factory('DataFactory', function($http){
 		},
 		selectData : function(Url) {
 			return $http.get(Url);
+		},
+		getQuestion : function(Url, fp) {
+			return $http.post(Url, fp);
+		},
+		putNewPwd : function(Url, sc) {
+			console.log("services");
+			return $http.put(Url, sc);
 		}
 	}
             

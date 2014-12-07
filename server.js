@@ -51,6 +51,13 @@ app.get('/users', function(req,res){
   });
 });
 
+app.post("/forgotPassword", function(req,res){
+  var uname = req.body.uname;
+  dbUser.user.find({username : uname},function(er,data){
+    res.json(data)
+  });
+});
+
 app.post('/RegisterUser', function(req,res){
 
  var uname=req.body.uname
@@ -58,7 +65,9 @@ app.post('/RegisterUser', function(req,res){
   first:req.body.fname,
   last:req.body.lname,
   username:uname,
-  password:sha1(req.body.password)
+  password:sha1(req.body.password),
+  secQues:req.body.secQues,
+  answer:req.body.answer
 };
 
 dbUser.user.findOne({username:uname},function(err, results){
@@ -138,6 +147,21 @@ app.delete("/savedProducts/:id", function(req, res){
   dbSavedProducts.savedProducts.remove({_id : mongojs.ObjectId(id)}, 
     function (err, doc) {
       res.json(doc);
+    });
+});
+
+app.put("/updatePassword/:id", function(req, res){
+  var newPwd = req.body.newPasswordAdded; 
+  var id = req.params.id; 
+  console.log("server update pwd called")
+  
+  dbUser.user.findAndModify({
+    query: {_id : mongojs.ObjectId(id)}, 
+    update: {$set : {password : sha1(newPwd)}}},
+    function (err, doc, lastErrorObject) {
+      dbUser.user.find(function(err, data){
+        res.json(doc);
+      });
     });
 });
 

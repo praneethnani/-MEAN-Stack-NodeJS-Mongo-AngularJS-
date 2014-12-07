@@ -35,6 +35,17 @@ ngIdpApp.config(['$routeProvider',
       when('/savedProducts', {
         templateUrl: 'templates/SavedProducts.html',
         controller: 'savedProductsCtrl'
+      }).
+      when('/forgotPassword', {
+        templateUrl: 'templates/ForgotPassword.html',
+        controller: 'forgotPasswordCtrl'
+      }).
+      when('/passwordChange', {
+        templateUrl: 'templates/PasswordUpdated.html'
+      }).
+      when('/report', {
+        templateUrl: 'templates/Report.html',
+        controller: 'reportCtrl'
       });
       
     console.log("routeProvider: "+ $routeProvider);
