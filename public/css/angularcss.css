@@ -1,0 +1,22 @@
+.ng-invalid.ng-dirty{
+	border-color: #FA787E;
+}
+
+.ng-valid.ng-dirty{
+	border-color: #78FA89;
+}
+
+.wrap {
+    max-width: 33%;
+    padding-left: 2%;
+    margin-right: 2%;
+    float:left;
+}
+
+.picture{
+	  max-width: 100%;
+}
+
+.cart{
+	 
+}

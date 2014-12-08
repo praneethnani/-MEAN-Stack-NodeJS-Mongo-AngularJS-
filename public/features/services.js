@@ -1,4 +1,4 @@
-'use strict';
+
 
 /* Services */
 var ngIdpServices = angular.module('ngIdpServices', []);
@@ -30,6 +30,9 @@ ngIdpServices.factory('DataFactory', function($http){
 		putNewPwd : function(Url, sc) {
 			console.log("services");
 			return $http.put(Url, sc);
+		},
+		postData : function(Url, sa) {
+			return $http.post(Url, sa);
 		}
 	}
             

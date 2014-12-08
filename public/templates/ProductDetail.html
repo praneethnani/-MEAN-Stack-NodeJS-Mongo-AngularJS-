@@ -1,30 +1,30 @@
+<div ng-controller="productDetailCtrl as store">
+  <!--  Store Header  -->
+  <header>
+    <h1 class="text-center">IDP SHOP : Product Details</h2>
+    </header>
 
-<div class="container" >
+    <!--  Products Container  -->
 
-  <form role="form" ng-submit="searchFromEbayByProductID()" >
-    <h2 class="">Welcome to IDP Shop</h2>
-    <div class="row">
-      <div class="col-lg-6">
-        <div class="input-group">
-          <!-- <div class="input-group-btn">
-            <select type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false" ng-model="category"> <span class="caret"></span>
-              <option value="laptops" selected>Laptops</option>
-              <option value="desktops">Desktops</option>
-              <option value="mobilePhones">Mobile Phones</option>
-              <option value="tablets">Tablets</option>
-            </select>
-          </div> -->
-          <!-- /btn-group -->
-        <!--   <label>productId</label>
-          <input type="text" class="form-control" ng-model="item.itemId" required> -->
-        </div><!-- /input-group -->
-
-      </div><!-- /.row -->
-      <!-- <button class="btn btn-primary" type="submit">Search</button> -->
-      <div id="results">
-
+    <!-- <div class="list-group" ng-model="product"> -->
+    <div class="list-group" ng-model="product">
+      <!--  Product Container  -->
+      <div class="list-group-item">
+        <h4><b>{{product.Item.Title}}</b> </h4>
       </div>
-    </form>
+      <br/>
 
-  </div> <!-- /container -->
+      <div>
 
+       <div class="wrap">
+        <!-- Image Gallery  -->
+        <product-gallery ></product-gallery>
+      </div>
+      <product-tabs style="float: right; width:58% ;margin-right:2%"></product-tabs>
+
+    </div>
+  </div>
+</div>
+</div>
+<div style="clear: both;"></div>
+</div>

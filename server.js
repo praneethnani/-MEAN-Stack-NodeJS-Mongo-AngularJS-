@@ -16,6 +16,7 @@ app.use(express.bodyParser());
 var dbUser = mongojs("dbms", ["user"]);
 var dbComments = mongojs("dbms", ["comments"]);
 var dbSavedProducts = mongojs("dbms", ["savedProducts"]);
+var dbCart = mongojs("dbms", ["cart"]);
 
 app.get("/AuthenticateUser", function (req, res) {
   	//res.write("Hello")
@@ -104,8 +105,25 @@ app.get("/EbayFetchByItemId/:Itemid", function (req, res) {
   });
 });
 
+app.get("/reviews/:ItemId", function(req, res){
+  var id = req.params.ItemId;
+  console.log(id);
+  dbComments.comments.find({itemId : id}, function (err, doc){
+    console.log(doc);
+    res.json(doc);
+  });
+});
+
+app.post("/reviews", function (req, res) {
+  console.log(req.body);
+  dbComments.comments.insert(req.body, function(err, doc) {
+    res.json(doc);
+  });
+});
+
 app.get("/comments", function (req, res) {
 dbComments.comments.find({username : req.session.username}, function(err, docs){
+    console.log(docs);
       res.json(docs);
     });
 });
@@ -149,6 +167,20 @@ app.delete("/savedProducts/:id", function(req, res){
     function (err, doc) {
       res.json(doc);
     });
+});
+
+app.post("/savedProducts", function (req, res) {
+  console.log(req.body);
+  dbSavedProducts.savedProducts.insert(req.body, function(err, doc) {
+    res.json(doc);
+  });
+});
+
+app.post("/cart", function (req, res) {
+  console.log(req.body);
+  dbCart.cart.insert(req.body, function(err, doc) {
+    res.json(doc);
+  });
 });
 
 app.put("/updatePassword/:id", function(req, res){

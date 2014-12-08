@@ -1,25 +1,16 @@
-'use strict';
+
 
 var ngIdpControllers = angular.module('ngIdpControllers', []);
 
-// function showTopNavBar($scope, DataFactory) {
-// 	DataFactory.getUserName("/username").success(function(json){
-// 		if(json != ""){
-// 			var a = document.getElementById('tnavBar');
-// 			a.style.visibility = "visible";
-// 		}
-// 	});
-// };
-
 function showTopNavBar($scope, DataFactory, $cookieStore) {
 	var uname = $cookieStore.get('username');
-		if(uname != ""){
-			var a = document.getElementById('tnavBar');
-			a.style.visibility = "visible";
-		} else {
-			var a = document.getElementById('tnavBar');
-			a.style.visibility = "hidden";
-		}
+	if(uname != ""){
+		var a = document.getElementById('tnavBar');
+		a.style.visibility = "visible";
+	} else {
+		var a = document.getElementById('tnavBar');
+		a.style.visibility = "hidden";
+	}
 	
 };
 
@@ -117,18 +108,97 @@ ngIdpControllers.controller('registrationCtrl', ['$scope','DataFactory', '$cooki
 	}
 }]);
 
+
 ngIdpControllers.controller('productDetailCtrl', ['$scope','DataFactory', '$cookieStore', function ($scope, DataFactory, $cookieStore) {
+	$scope.product = [{}];
 	console.log("Hello from productDetailCtrl");
 	showTopNavBar($scope, DataFactory,$cookieStore);
+	var u = $cookieStore.get('username');
 	var url = document.URL;
 	var urlContents = url.split("=");
 	var ItemID = urlContents[1];
 	console.log(ItemID);
 	DataFactory.fetchByItemId("/EbayFetchByItemId/"+ ItemID)
 	.success(function(json){
-		console.log(json);
-			//location.replace("http://localhost:3000/" + "#homePage");
+		$scope.product=JSON.parse(json);
+      //location.replace("http://localhost:3000/" + "#homePage");
+  });
+
+	$scope.saveProduct = function (response) {
+		if ( u == '') {
+			alert("Please Login to save product.");
+			return;
+		}
+		$scope.add = {};
+		$scope.add.productTitle = $scope.product.Item.Title;
+		$scope.add.itemId = ItemID;
+		$scope.add.username = u;
+		console.log($scope.add);
+		DataFactory.postData("/savedProducts", $scope.add)
+		.success(function(response){
+			alert('Product saved for later.');
 		});
+	}
+
+	$scope.saveToCart = function (response) {
+		if ( u == '') {
+			alert("Please Login to add to cart.");
+			return;
+		}
+		$scope.addToCart = {};
+		$scope.addToCart.productTitle = $scope.product.Item.Title;
+		$scope.addToCart.itemId = ItemID;
+		$scope.addToCart.username = u;
+		$scope.addToCart.price = $scope.product.Item.ConvertedCurrentPrice.Value;
+		console.log($scope.addToCart);
+		DataFactory.postData("/cart", $scope.addToCart)
+		.success(function(response){
+			alert('Product added to the cart.');
+		});
+	}
+
+
+
+}]);
+
+
+ngIdpControllers.controller('ReviewController', ['$scope','DataFactory', '$cookieStore','$http', function ($scope, DataFactory, $cookieStore, $http) {
+	console.log("Hello from ReviewController");
+	showTopNavBar($scope, DataFactory,$cookieStore);
+	var u = $cookieStore.get('username');
+	var url = document.URL;
+	var urlContents = url.split("=");
+	var ItemID = urlContents[1];
+	console.log(ItemID);
+	this.reviews = [{}];
+	//Database connection to post the reviews
+	
+	$scope.all = function (response) {
+		$http.get("/reviews/" + ItemID)
+		.success(function(response){
+			console.log(response);
+			$scope.reviews = response;	
+			console.log($scope.reviews);
+		});
+	}
+
+	$scope.all();
+
+	this.addReview = function() {
+		if ( u == '') {
+			alert("Please Login to give review.");
+			return;
+		}
+		$scope.add = {};
+		$scope.add.comment = $scope.reviewCtrl.review.body;
+		$scope.add.productTitle = $scope.product.Item.Title;
+		$scope.add.itemId = ItemID;
+		$scope.add.username = u;
+		$http.post("/reviews", $scope.add)
+		.success(function(response){
+			$scope.all();
+		});
+	};
 
 }]);
 
@@ -137,10 +207,6 @@ ngIdpControllers.controller('commentCtrl', ['$scope', '$http', 'DataFactory','$c
 	showTopNavBar($scope, DataFactory,$cookieStore);
 	var u = $cookieStore.get('username');
 	$scope.username = u;
-	// DataFactory.getUserName("/username").success(function(json){
-	// 	console.log(json);
-	// 	$scope.username = json;
-	// });
 
 	$scope.renderComments = function (response) {
 		console.log(response);
@@ -174,7 +240,7 @@ ngIdpControllers.controller('commentCtrl', ['$scope', '$http', 'DataFactory','$c
 		$http.get("/comments")
 		.success($scope.renderComments);
 	}
-	
+
 	$scope.all();
 }]);
 

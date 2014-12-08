@@ -1,0 +1,29 @@
+<!--  Product Reviews List -->
+
+<h4>Reviews</h4>
+
+<!--  Review Form -->
+<form name="reviewForm" ng-controller="ReviewController as reviewCtrl" ng-submit="reviewCtrl.addReview()" >
+  <!--  Live Preview -->
+
+<table class="table">
+  <tbody>
+      <tr ng-repeat="review in reviews">
+          <td>
+            {{review.username}} </br> {{review.comment}}
+          </td>
+      </tr>
+    </tbody>
+</table>
+
+
+  <!--  Review Form -->
+  <h4>Submit a Review</h4>
+  <fieldset class="form-group">
+    <!-- <h1>{{add}}</h1> -->
+    <textarea ng-model="reviewCtrl.review.body" class="form-control" placeholder="Write a short review of the product..." title="Review"></textarea>
+  </fieldset>
+  <fieldset class="form-group">
+    <input type="submit" class="btn btn-primary pull-right" value="Submit Review" />
+  </fieldset>
+</form>

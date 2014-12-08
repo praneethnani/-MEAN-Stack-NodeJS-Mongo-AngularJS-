@@ -1,4 +1,4 @@
-'use strict';
+
 
 /* App Module */
 
@@ -26,8 +26,7 @@ ngIdpApp.config(['$routeProvider',
         controller: 'registrationCtrl'
       }).
       when('/productDetail', {
-        templateUrl: 'templates/ProductDetail.html',
-        controller: 'productDetailCtrl'
+        templateUrl: 'templates/ProductDetail.html'
       }).
       when('/comments', {
         templateUrl: 'templates/Comments.html',
