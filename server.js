@@ -202,19 +202,13 @@ app.put("/updatePassword/:id", function(req, res){
 
 app.get("/address", function (req, res) {
 dbAddress.address.find({username : req.session.username}, function(err, docs){
-    console.log("server response:"+docs);
+    //console.log("server response:"+docs);
       res.json(docs);
     });
 });
 
-app.get("/address/:id", function(req, res){
-  var id = req.params.id;
-  dbAddress.address.findOne({_id : mongojs.ObjectId(id)}, function (err, doc){
-    res.json(doc);
-  });
-});
-
-app.post("/address", function (req, res) {
+app.post("/address/:u", function (req, res) {
+  req.body.username = req.params.u;
   console.log(req.body);
   dbAddress.address.insert(req.body, function(err, doc) {
     res.json(doc);
@@ -243,7 +237,8 @@ app.get("/cards/:id", function(req, res){
   });
 });
 
-app.post("/cards", function (req, res) {
+app.post("/cards/:u", function (req, res) {
+  req.body.username = req.params.u;
   console.log(req.body);
   dbCard.cards.insert(req.body, function(err, doc) {
     res.json(doc);

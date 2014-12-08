@@ -410,10 +410,9 @@ ngIdpControllers.controller('addAddressCtrl', ['$scope', '$http', 'DataFactory',
 	var u = $cookieStore.get('username');
 	$scope.add = function() {
 		console.log($scope.newAddress);
-		$http.post("/address", $scope.newAddress)
+		$http.post("/address/" + u, $scope.newAddress)
 		.success(function(response){
-			//$scope.all();
-			console.log(response);
+			//console.log(response);
 		});
 		location.replace("http://localhost:3000/" + "#address");
 	};
@@ -458,9 +457,8 @@ ngIdpControllers.controller('addCardCtrl', ['$scope', '$http', 'DataFactory','$c
 	var u = $cookieStore.get('username');
 	$scope.add = function() {
 		console.log($scope.newCard);
-		$http.post("/cards", $scope.newCard)
+		$http.post("/cards/" + u, $scope.newCard)
 		.success(function(response){
-			//$scope.all();
 			console.log(response);
 		});
 		location.replace("http://localhost:3000/" + "#payment");
