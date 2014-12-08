@@ -1,0 +1,92 @@
+<head>
+	<link href="/css/Registration.css" rel="stylesheet"/>
+</head>
+
+<div class="container">
+
+	<table class="table">
+		<thead>
+			<tr>
+				<!-- <td>
+					<input class="form-control" ng-model="address.address" />
+				</td>
+				<td><button class="btn btn-primary" ng-click="update()">Update</button></td> -->
+				<td><button class="btn btn-primary" ng-click="redirectNewAddress()">Add New Address</button></td>
+			</tr>
+		</thead>
+		<tbody ng-repeat="address in addresses">
+			<tr>
+				<td>
+					<label>Street Address</label>
+				</td>
+				<td>
+					{{address.streetAddress}} 
+				</td>
+				<td>
+					<button ng-click="remove(address._id)" class="btn btn-danger">Delete</button>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label>Apartment #</label>
+				</td>
+				<td>
+					{{address.aptNumber}} 
+				</td>
+				<!-- <td>
+					<button ng-click="select(address._id)" class="btn btn-warning">Edit</button>
+				</td> -->
+			</tr>
+			<tr>
+				<td>
+					<label>City</label>
+				</td>
+				<td>
+					{{address.city}} 
+				</td>
+				<!-- <td>
+					<button ng-click="select(address._id)" class="btn btn-warning">Edit</button>
+				</td> -->
+			</tr>
+			<tr>
+				<td>
+					<label>State</label>
+				</td>
+				<td>
+					{{address.state}} 
+				</td>
+				<!-- <td>
+					<button ng-click="select(address._id)" class="btn btn-warning">Edit</button>
+				</td> -->
+			</tr>
+			<tr>
+				<td>
+					<label>Zip Code</label>
+				</td>
+				<td>
+					{{address.zip}} 
+				</td>
+				<!-- <td>
+					<button ng-click="select(address._id)" class="btn btn-warning">Edit</button>
+				</td> -->
+			</tr>
+			<tr>
+				<td>
+					<label>Phone Number</label>
+				</td>
+				<td>
+					{{address.phone}} 
+				</td>
+				<!-- <td>
+					<button ng-click="select(address._id)" class="btn btn-warning">Edit</button>
+				</td> -->
+			</tr>
+			
+		</tbody>
+	</table>
+	<div class="row">
+		<div class="col-md-4 col-md-offset-1">
+			<a class="btn btn-lg btn-primary btn-block" href="#profile">Done</a>
+		</div>
+	</div>
+</div> 

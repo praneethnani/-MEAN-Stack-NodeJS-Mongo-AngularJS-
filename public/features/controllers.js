@@ -232,6 +232,7 @@ ngIdpControllers.controller('commentCtrl', ['$scope', '$http', 'DataFactory','$c
 		console.log(id);
 		DataFactory.selectData("/comments/" + id)
 		.success(function (response){
+			console.log(response);
 			$scope.comment = response;
 		});
 	};
@@ -364,3 +365,106 @@ ngIdpControllers.controller('reportCtrl', ['$scope', '$http', 'DataFactory', fun
 	
 
 }]);
+
+ngIdpControllers.controller('ProfileCtrl', ['$scope', '$http', 'DataFactory','$cookieStore', function ($scope, $http, DataFactory,  $cookieStore) {
+	console.log("Hello from profileCtrl");
+	showTopNavBar($scope, DataFactory,$cookieStore);
+	var u = $cookieStore.get('username');
+	$scope.username = u;
+
+}]);
+
+ngIdpControllers.controller('addressCtrl', ['$scope', '$http', 'DataFactory','$cookieStore', function ($scope, $http, DataFactory,  $cookieStore) {
+	console.log("Hello from addressCtrl");
+	showTopNavBar($scope, DataFactory,$cookieStore);
+	var u = $cookieStore.get('username');
+	$scope.username = u;
+	$scope.renderAddresses = function (response) {
+		$scope.addresses = response;
+		console.log(response);	
+	};
+
+	$scope.remove = function (id) {
+		DataFactory.deleteData("/address/" + id)
+		.success(function(response){
+			$scope.all();
+		});
+	};
+
+	$scope.all = function (response) {
+		console.log("all called");
+		$http.get("/address")
+		.success($scope.renderAddresses);
+	};
+
+	$scope.redirectNewAddress = function() {
+		location.replace("http://localhost:3000/" + "#addAddress");
+	};
+
+	$scope.all();
+}]);
+
+ngIdpControllers.controller('addAddressCtrl', ['$scope', '$http', 'DataFactory','$cookieStore', function ($scope, $http, DataFactory,  $cookieStore) {
+	console.log("Hello from addAddressCtrl");
+	showTopNavBar($scope, DataFactory,$cookieStore);
+	var u = $cookieStore.get('username');
+	$scope.add = function() {
+		console.log($scope.newAddress);
+		$http.post("/address", $scope.newAddress)
+		.success(function(response){
+			//$scope.all();
+			console.log(response);
+		});
+		location.replace("http://localhost:3000/" + "#address");
+	};
+
+}]);
+
+ngIdpControllers.controller('paymentCtrl', ['$scope', '$http', 'DataFactory','$cookieStore', function ($scope, $http, DataFactory,  $cookieStore) {
+	console.log("Hello from paymentCtrl");
+	showTopNavBar($scope, DataFactory,$cookieStore);
+	var u = $cookieStore.get('username');
+	$scope.username = u;
+
+	$scope.renderCards = function (response) {
+		$scope.cards = response;
+		console.log(response);	
+	};
+
+	$scope.remove = function (id) {
+		DataFactory.deleteData("/cards/" + id)
+		.success(function(response){
+			$scope.all();
+		});
+	};
+
+	$scope.all = function (response) {
+		console.log("all called");
+		$http.get("/cards")
+		.success($scope.renderCards);
+	};
+
+	$scope.redirectNewCard = function() {
+		location.replace("http://localhost:3000/" + "#addCard");
+	};
+
+	$scope.all();
+
+}]);
+
+ngIdpControllers.controller('addCardCtrl', ['$scope', '$http', 'DataFactory','$cookieStore', function ($scope, $http, DataFactory,  $cookieStore) {
+	console.log("Hello from addCardCtrl");
+	showTopNavBar($scope, DataFactory,$cookieStore);
+	var u = $cookieStore.get('username');
+	$scope.add = function() {
+		console.log($scope.newCard);
+		$http.post("/cards", $scope.newCard)
+		.success(function(response){
+			//$scope.all();
+			console.log(response);
+		});
+		location.replace("http://localhost:3000/" + "#payment");
+	};
+
+}]);
+

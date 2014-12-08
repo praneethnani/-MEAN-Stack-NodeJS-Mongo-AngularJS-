@@ -46,6 +46,26 @@ ngIdpApp.config(['$routeProvider',
       when('/report', {
         templateUrl: 'templates/Report.html',
         controller: 'reportCtrl'
+      }).
+      when('/address', {
+        templateUrl: 'templates/Address.html',
+        controller: 'addressCtrl'
+      }).
+      when('/profile', {
+        templateUrl: 'templates/Profile.html',
+        controller: 'ProfileCtrl'
+      }).
+      when('/payment', {
+        templateUrl: 'templates/Payment.html',
+        controller: 'paymentCtrl'
+      }).
+      when('/addCard', {
+        templateUrl: 'templates/AddCard.html',
+        controller: 'addCardCtrl'
+      }).
+      when('/addAddress', {
+        templateUrl: 'templates/AddAddress.html',
+        controller: 'addAddressCtrl'
       });
       
     console.log("routeProvider: "+ $routeProvider);

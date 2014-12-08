@@ -17,6 +17,8 @@ var dbUser = mongojs("dbms", ["user"]);
 var dbComments = mongojs("dbms", ["comments"]);
 var dbSavedProducts = mongojs("dbms", ["savedProducts"]);
 var dbCart = mongojs("dbms", ["cart"]);
+var dbAddress = mongojs("dbms", ["address"]);
+var dbCard = mongojs("dbms", ["cards"]);
 
 app.get("/AuthenticateUser", function (req, res) {
   	//res.write("Hello")
@@ -198,7 +200,63 @@ app.put("/updatePassword/:id", function(req, res){
     });
 });
 
+app.get("/address", function (req, res) {
+dbAddress.address.find({username : req.session.username}, function(err, docs){
+    console.log("server response:"+docs);
+      res.json(docs);
+    });
+});
 
+app.get("/address/:id", function(req, res){
+  var id = req.params.id;
+  dbAddress.address.findOne({_id : mongojs.ObjectId(id)}, function (err, doc){
+    res.json(doc);
+  });
+});
+
+app.post("/address", function (req, res) {
+  console.log(req.body);
+  dbAddress.address.insert(req.body, function(err, doc) {
+    res.json(doc);
+  });
+});
+
+app.delete("/address/:id", function(req, res){
+  var id = req.params.id;
+  dbAddress.address.remove({_id : mongojs.ObjectId(id)}, 
+    function (err, doc) {
+      res.json(doc);
+    });
+});
+
+app.get("/cards", function (req, res) {
+dbCard.cards.find({username : req.session.username}, function(err, docs){
+    console.log("server response:"+docs);
+      res.json(docs);
+    });
+});
+
+app.get("/cards/:id", function(req, res){
+  var id = req.params.id;
+  dbCard.cards.findOne({_id : mongojs.ObjectId(id)}, function (err, doc){
+    res.json(doc);
+  });
+});
+
+app.post("/cards", function (req, res) {
+  console.log(req.body);
+  dbCard.cards.insert(req.body, function(err, doc) {
+    res.json(doc);
+  });
+});
+
+app.delete("/cards/:id", function(req, res){
+  var id = req.params.id;
+  dbCard.cards.remove({_id : mongojs.ObjectId(id)}, 
+    function (err, doc) {
+      res.json(doc);
+    });
+});
 
 var ipaddress = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
 var port      = process.env.OPENSHIFT_NODEJS_PORT || 3000;

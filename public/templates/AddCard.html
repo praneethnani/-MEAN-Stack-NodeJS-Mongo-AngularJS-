@@ -1,0 +1,71 @@
+<head>
+	<link href="/css/Registration.css" rel="stylesheet"/>
+</head>
+
+<div class="container">
+
+	<table class="table">
+		<thead>
+			<tr>
+				<h2>New Card Details</h2>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>
+					<label>Username</label>
+				</td>
+				<td>
+					<input class="form-control" ng-model="newCard.username" /> 
+				</td>
+				
+			</tr>
+			<tr>
+				<td>
+						<label>Cardholder Name</label>
+					</td>
+				<td>
+					<input class="form-control" ng-model="newCard.name" /> 
+				</td>
+				
+			</tr>
+			<tr>
+				<td>
+					<label>Card Number</label>
+				</td>
+				<td>
+					<input class="form-control" ng-model="newCard.number" /> 
+				</td>
+				
+			</tr>
+			<tr>
+				<td>
+					<label>Security Code</label>
+				</td>
+				<td>
+					<input class="form-control" ng-model="newCard.securityCode" /> 
+				</td>
+				
+			</tr>
+			<tr>
+				<td>
+					<label>Expiration Details (mm/yyyy)</label>
+				</td>
+				<td>
+					<input class="form-control" ng-model="newCard.expire" /> 
+				</td>
+				
+			</tr>
+			
+			<br><br><br>
+		</tbody>
+	</table>
+	<div class="row">
+		<div class="col-md-4 col-md-offset-1">
+			<a class="btn btn-lg btn-primary btn-block" href="#payment">Back</a>
+		</div>
+		<div class="col-md-4 col-md-offset-1">
+			<a class="btn btn-lg btn-primary btn-block" ng-click="add()">Add</a>
+		</div>
+	</div>
+</div> 
