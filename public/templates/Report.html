@@ -1,4 +1,4 @@
-<div class="container" ng-controller="reportCtrl">
+<div class="container">
 	<h1>Generate Report</h1>
 	<form role="form" ng-submit="generateReport()">
 		<div class="row">
@@ -23,4 +23,41 @@
 		<br/>
 		<div><button class="btn btn-lg btn-primary btn-block" type="submit" >Generate Report</button></div>
 	</form>
+
+	<h1>Your Generated Report:</h1>
+	<table class="table" id="userTable">
+		<tbody>
+
+			<tr ng-repeat="item in entries">
+					<td>
+						<b>{{item.first}}</b>
+					</td>
+					<td>
+						<b>{{item.last}}</b>
+					</td>
+					<td>
+						<a href="/#productDetail?id={{item.joinItemId._id}}"><b>{{item.joinItemId.productTitle}}</b></a>
+					</td>
+					<td>
+						<b>{{item.joinItemId.price}}</b>
+					</td>
+			</tr>
+		</tbody>
+	</table>
+	<table class="table" id="productTable">
+		<tbody>
+
+			<tr ng-repeat="item in entries">
+					<td>
+						<a href="/#productDetail?id={{item.joinItemId._id}}"><b>{{item.productTitle}}</b></a>
+					</td>
+					<td>
+						<b>{{item.price}}</b>
+					</td>
+					<td>
+						<a href="/#profile?id={{item.username}}"><b>{{item.username}}</b></a>
+					</td>
+			</tr>
+		</tbody>
+	</table>
 </div>

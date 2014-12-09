@@ -36,12 +36,26 @@ ngIdpControllers.controller('SignInCtrl', ['$scope','DataFactory', '$cookieStore
 	}
 }]);
 
-ngIdpControllers.controller('HomepageCtrl', ['$scope','DataFactory', '$cookieStore', function ($scope, DataFactory, $cookieStore) {
+ngIdpControllers.controller('HomepageCtrl', ['$scope', '$http', 'DataFactory','$cookieStore', function ($scope, $http, DataFactory,  $cookieStore) {
 	console.log("Hello from HomepageCtrl");
 	showTopNavBar($scope, DataFactory,$cookieStore);
 	var u = $cookieStore.get('username');
 	$scope.username = u;
-	
+	$scope.homepage = {
+		report: false
+	};
+
+	$http.get("/isAdmin", $scope.homepage)
+	.success(function(response){
+		console.log(response);
+		console.log(response[0].username);
+		if (response[0].username == "admin"){
+			$scope.homepage = {
+				report: true
+			};
+		}
+	});
+
 	function _cb_findItemsByKeywords(root) {
 		var items = root.findItemsByKeywordsResponse[0].searchResult[0].item || [];
 		var html = [];
@@ -137,10 +151,15 @@ ngIdpControllers.controller('productDetailCtrl', ['$scope','DataFactory', '$cook
 		$scope.add.productTitle = $scope.product.Item.Title;
 		$scope.add.itemId = ItemID;
 		$scope.add.username = u;
+		$scope.add.price = $scope.product.Item.ConvertedCurrentPrice.Value;
 		console.log($scope.add);
 		DataFactory.postData("/savedProducts", $scope.add)
 		.success(function(response){
 			alert('Product saved for later.');
+		});
+		DataFactory.postData("/saveItems", $scope.add)
+		.success(function(response){
+			console.log("Item saved in items");
 		});
 	}
 
@@ -158,6 +177,10 @@ ngIdpControllers.controller('productDetailCtrl', ['$scope','DataFactory', '$cook
 		DataFactory.postData("/cart", $scope.addToCart)
 		.success(function(response){
 			alert('Product added to the cart.');
+		});
+		DataFactory.postData("/saveItems", $scope.addToCart)
+		.success(function(response){
+			console.log("Item saved in items");
 		});
 	}
 
@@ -393,7 +416,53 @@ ngIdpControllers.controller('forgotPasswordCtrl', ['$scope', '$http', 'DataFacto
 ngIdpControllers.controller('reportCtrl', ['$scope', '$http', 'DataFactory', function ($scope, $http, DataFactory) {
 	console.log("Hello from reportCtrl");
 	
+	$scope.generateReport = function() {
 
+		if ($scope.report == undefined)
+			alert('Please select which kind of report you want to generate.');
+		else {
+			if ($scope.report.selection == undefined)
+				alert('Please select which kind of report you want to generate.');
+			else {
+				if ($scope.report.selection == "product" && (!($scope.report.searchKey == undefined) &&
+					isNaN($scope.report.searchKey))){
+					alert('Please enter numeric product Id');
+			}
+			else if ($scope.report.selection == "user" && !isNaN($scope.report.searchKey))
+				alert('Please enter valid username');
+			else if ($scope.report.selection == "user" && isNaN($scope.report.searchKey)) {
+				var a = document.getElementById('userTable');
+				a.style.visibility = "visible";
+				var b = document.getElementById('productTable');
+				b.style.visibility = "hidden";
+				
+				var mop = $scope.report.searchKey;
+				$http.post("/userReport", $scope.report)
+				.success(function(response){
+					console.log(response[0]);
+					if (response.length != 0)
+						$scope.entries = response;
+					else
+						alert("Username not valid.");
+				});
+			}
+			else {
+				var a = document.getElementById('userTable');
+				a.style.visibility = "hidden";
+				var b = document.getElementById('productTable');
+				b.style.visibility = "visible";
+				$http.post("/productReport", $scope.report)
+				.success(function(response){
+					if (response.length != 0)
+						$scope.entries = response;
+					else
+						alert("ItemID not valid.");
+				});
+			}
+		}
+	}
+
+};
 }]);
 
 ngIdpControllers.controller('ProfileCtrl', ['$scope', '$http', 'DataFactory','$cookieStore', function ($scope, $http, DataFactory,  $cookieStore) {
@@ -412,13 +481,11 @@ ngIdpControllers.controller('ProfileCtrl', ['$scope', '$http', 'DataFactory','$c
 }]);
 
 ngIdpControllers.controller('addressCtrl', ['$scope', '$http', 'DataFactory','$cookieStore', function ($scope, $http, DataFactory,  $cookieStore) {
-	console.log("Hello from addressCtrl");
 	showTopNavBar($scope, DataFactory,$cookieStore);
 	var u = $cookieStore.get('username');
 	$scope.username = u;
 	$scope.renderAddresses = function (response) {
-		$scope.addresses = response;
-		console.log(response);	
+		$scope.addresses = response;	
 	};
 
 	$scope.remove = function (id) {
@@ -442,7 +509,6 @@ ngIdpControllers.controller('addressCtrl', ['$scope', '$http', 'DataFactory','$c
 }]);
 
 ngIdpControllers.controller('addAddressCtrl', ['$scope', '$http', 'DataFactory','$cookieStore', function ($scope, $http, DataFactory,  $cookieStore) {
-	console.log("Hello from addAddressCtrl");
 	showTopNavBar($scope, DataFactory,$cookieStore);
 	var u = $cookieStore.get('username');
 	$scope.add = function() {
@@ -457,7 +523,6 @@ ngIdpControllers.controller('addAddressCtrl', ['$scope', '$http', 'DataFactory',
 }]);
 
 ngIdpControllers.controller('paymentCtrl', ['$scope', '$http', 'DataFactory','$cookieStore', function ($scope, $http, DataFactory,  $cookieStore) {
-	console.log("Hello from paymentCtrl");
 	showTopNavBar($scope, DataFactory,$cookieStore);
 	var u = $cookieStore.get('username');
 	$scope.username = u;
@@ -489,7 +554,6 @@ ngIdpControllers.controller('paymentCtrl', ['$scope', '$http', 'DataFactory','$c
 }]);
 
 ngIdpControllers.controller('addCardCtrl', ['$scope', '$http', 'DataFactory','$cookieStore', function ($scope, $http, DataFactory,  $cookieStore) {
-	console.log("Hello from addCardCtrl");
 	showTopNavBar($scope, DataFactory,$cookieStore);
 	var u = $cookieStore.get('username');
 	$scope.add = function() {
@@ -504,7 +568,6 @@ ngIdpControllers.controller('addCardCtrl', ['$scope', '$http', 'DataFactory','$c
 }]);
 
 ngIdpControllers.controller('purchaseCtrl', ['$scope', '$http', 'DataFactory','$cookieStore', function ($scope, $http, DataFactory,  $cookieStore) {
-	console.log("Hello from purchaseCtrl");
 	showTopNavBar($scope, DataFactory,$cookieStore);
 	var u = $cookieStore.get('username');
 	$scope.username = u;

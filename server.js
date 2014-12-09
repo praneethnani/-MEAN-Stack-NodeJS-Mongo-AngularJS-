@@ -23,9 +23,11 @@ var dbCard = mongojs("dbms", ["cards"]);
 var dbPurchases = mongojs("dbms", ["purchases"]);
 var dbItems = mongojs("dbms", ["items"]);
 
-app.get("/AuthenticateUser", function (req, res) {
-  	//res.write("Hello")
+app.get("/isAdmin", function(req, res){
+  dbUser.user.find({username : req.session.username}, function (err, doc){
+    res.json(doc);
   });
+});
 
 app.get("/username", function (req, res) {
   res.send(req.session.username);
@@ -200,6 +202,14 @@ app.post("/savedProducts", function (req, res) {
   });
 });
 
+app.post("/saveItems", function (req, res) {
+  console.log(req.body);
+  dbItems.items.insert({_id : req.body.itemId, productTitle : req.body.productTitle, 
+    username: req.body.username, price: req.body.price}, function(err, doc) {
+    res.json(doc);
+  });
+});
+
 app.post("/cart", function (req, res) {
   console.log(req.body);
   dbCart.cart.insert(req.body, function(err, doc) {
@@ -299,7 +309,7 @@ app.get("/purchases", function (req, res) {
       var i;
       console.log(items);
       console.log(items[0]);
-      console.log(items.length);
+     console.log(items.length);
         for (i = 0; i < items.length ; i++){
           var item = items[i];
           if (item.username == req.session.username)
@@ -315,13 +325,86 @@ app.get("/purchases", function (req, res) {
         res.json(resultItem);
        
     });
-
-
-  // dbPurchases.purchases.find({username : req.session.username}, function(err, docs){
-  //   res.json(docs);
-  //   console.log(docs);
-  // });
 });
+
+
+app.post("/userReport", function (req, res) {
+  var query = {};
+  if (req.body.searchKey != undefined){
+    var user = req.body.searchKey;
+    query.username = user.toString();
+  }
+  mongoJoin
+    .query(
+      //say we have sales records and we store all the products for sale in a different collection
+      dbUser.collection("user"),
+        query, //query statement
+        {} //fields
+    )
+    .join({
+        joinCollection: dbPurchases.collection("purchases"),
+        //respects the dot notation, multiple keys can be specified in this array
+        leftKeys: ["username"],
+        //This is the key of the document in the right hand document
+        rightKeys: ["username"],
+        //This is the new subdocument that will be added to the result document
+        newKey: "joinUsername"
+    })
+    .join({
+        joinCollection: dbItems.collection("items"),
+        //respects the dot notation, multiple keys can be specified in this array
+        leftKeys: ["joinUsername.itemId"],
+        //This is the key of the document in the right hand document
+        rightKeys: ["_id"],
+        //This is the new subdocument that will be added to the result document
+        newKey: "joinItemId"
+    })
+    //Call exec to run the compiled query and catch any errors and results, in the callback
+    .exec(function (err, items) {
+          res.json(items);
+      
+    });
+});
+
+app.post("/productReport", function (req, res) {
+  var query = {};
+  if (req.body.searchKey != undefined){
+    var id = req.body.searchKey;
+    query._id = id.toString();
+  }
+  mongoJoin
+    .query(
+      //say we have sales records and we store all the products for sale in a different collection
+      dbItems.collection("items"),
+        query, //query statement
+        {} //fields
+    )
+    .join({
+        joinCollection: dbPurchases.collection("purchases"),
+        //respects the dot notation, multiple keys can be specified in this array
+        leftKeys: ["_id"],
+        //This is the key of the document in the right hand document
+        rightKeys: ["itemId"],
+        //This is the new subdocument that will be added to the result document
+        newKey: "joinItemId"
+    })
+    .join({
+        joinCollection: dbUser.collection("user"),
+        //respects the dot notation, multiple keys can be specified in this array
+        leftKeys: ["joinItemId.username"],
+        //This is the key of the document in the right hand document
+        rightKeys: ["username"],
+        //This is the new subdocument that will be added to the result document
+        newKey: "joinUsername"
+    })
+    //Call exec to run the compiled query and catch any errors and results, in the callback
+    .exec(function (err, items) {
+      console.log(items);
+          res.json(items);
+      
+    });
+});
+
 
 var ipaddress = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
 var port      = process.env.OPENSHIFT_NODEJS_PORT || 3000;
