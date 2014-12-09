@@ -66,6 +66,10 @@ ngIdpApp.config(['$routeProvider',
       when('/addAddress', {
         templateUrl: 'templates/AddAddress.html',
         controller: 'addAddressCtrl'
+      }).
+      when('/purchase', {
+        templateUrl: 'templates/PurchaseHistory.html',
+        controller: 'purchaseCtrl'
       });
       
     console.log("routeProvider: "+ $routeProvider);

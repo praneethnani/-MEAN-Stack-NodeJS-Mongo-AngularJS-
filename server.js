@@ -1,9 +1,10 @@
 var express = require('express');
 var mongojs = require('mongojs');
 var sha1 = require('sha1');
-
 var app = express();
 var request = require("request");
+var MJ = require("mongo-fast-join");
+mongoJoin = new MJ();
 
 app.use(express.cookieParser());
 app.use(express.session({secret: '1234567890QWERTY'}));
@@ -19,6 +20,8 @@ var dbSavedProducts = mongojs("dbms", ["savedProducts"]);
 var dbCart = mongojs("dbms", ["cart"]);
 var dbAddress = mongojs("dbms", ["address"]);
 var dbCard = mongojs("dbms", ["cards"]);
+var dbPurchases = mongojs("dbms", ["purchases"]);
+var dbItems = mongojs("dbms", ["items"]);
 
 app.get("/AuthenticateUser", function (req, res) {
   	//res.write("Hello")
@@ -124,10 +127,10 @@ app.post("/reviews", function (req, res) {
 });
 
 app.get("/comments", function (req, res) {
-dbComments.comments.find({username : req.session.username}, function(err, docs){
+  dbComments.comments.find({username : req.session.username}, function(err, docs){
     console.log(docs);
-      res.json(docs);
-    });
+    res.json(docs);
+  });
 });
 
 app.get("/comments/:id", function(req, res){
@@ -158,9 +161,9 @@ app.delete("/comments/:id", function(req, res){
 });
 
 app.get("/savedProducts", function (req, res) {
-dbSavedProducts.savedProducts.find({username : req.session.username}, function(err, docs){
-      res.json(docs);
-    });
+  dbSavedProducts.savedProducts.find({username : req.session.username}, function(err, docs){
+    res.json(docs);
+  });
 });
 
 app.delete("/savedProducts/:id", function(req, res){
@@ -201,10 +204,10 @@ app.put("/updatePassword/:id", function(req, res){
 });
 
 app.get("/address", function (req, res) {
-dbAddress.address.find({username : req.session.username}, function(err, docs){
+  dbAddress.address.find({username : req.session.username}, function(err, docs){
     //console.log("server response:"+docs);
-      res.json(docs);
-    });
+    res.json(docs);
+  });
 });
 
 app.post("/address/:u", function (req, res) {
@@ -224,10 +227,10 @@ app.delete("/address/:id", function(req, res){
 });
 
 app.get("/cards", function (req, res) {
-dbCard.cards.find({username : req.session.username}, function(err, docs){
+  dbCard.cards.find({username : req.session.username}, function(err, docs){
     console.log("server response:"+docs);
-      res.json(docs);
-    });
+    res.json(docs);
+  });
 });
 
 app.get("/cards/:id", function(req, res){
@@ -251,6 +254,54 @@ app.delete("/cards/:id", function(req, res){
     function (err, doc) {
       res.json(doc);
     });
+});
+
+app.get("/purchases", function (req, res) {
+  //console.log(req.session.username);
+  mongoJoin
+    .query(
+      //say we have sales records and we store all the products for sale in a different collection
+      dbPurchases.collection("purchases"),
+        {}, //query statement
+        {} //fields
+    )
+    .join({
+        joinCollection: dbItems.collection("items"),
+        //respects the dot notation, multiple keys can be specified in this array
+        leftKeys: ["itemId"],
+        //This is the key of the document in the right hand document
+        rightKeys: ["itemId"],
+        //This is the new subdocument that will be added to the result document
+        newKey: "itemId"
+    })
+    //Call exec to run the compiled query and catch any errors and results, in the callback
+    .exec(function (err, items) {
+      var resultItem;
+      var i;
+      console.log(items);
+      console.log(items[0]);
+      console.log(items.length);
+        for (i = 0; i < items.length ; i++){
+          var item = items[i];
+          if (item.username == req.session.username)
+          {
+            console.log("success");
+            console.log(item);
+            resultItem = item;
+            break;
+
+          }
+        }
+        console.log(resultItem);
+        res.json(resultItem);
+       
+    });
+
+
+  // dbPurchases.purchases.find({username : req.session.username}, function(err, docs){
+  //   res.json(docs);
+  //   console.log(docs);
+  // });
 });
 
 var ipaddress = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";

@@ -1,0 +1,30 @@
+<div class="container">
+	<h1>Your Purchase History</h1>
+	<table class="table">
+		<thead>
+			<tr>
+					<td>
+						<h4>Product</h4>
+					</td>
+					<td>
+						<h4>Price in USD</h4>
+					</td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="purchase in purchases">
+					<td>
+						<a href="/#productDetail?id={{purchase.itemId}}">{{purchase.productTitle}}</a>
+					</td>
+					<td>
+						<b>{{purchase.price}}</b>
+					</td>
+			</tr>
+		</tbody>
+	</table>
+	<div class="row">
+		<div class="col-md-4 col-md-offset-1">
+			<a class="btn btn-lg btn-primary btn-block" href="#profile">Back</a>
+		</div>
+	</div>
+</div>

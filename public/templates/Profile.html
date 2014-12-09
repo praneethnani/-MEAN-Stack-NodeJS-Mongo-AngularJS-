@@ -1,44 +1,43 @@
+<script>
+$(function () {
+    $(":file").change(function () {
+        if (this.files && this.files[0]) {
+            var reader = new FileReader();
+            reader.onload = imageIsLoaded;
+            reader.readAsDataURL(this.files[0]);
+            alert(this.files[0]);
+        }
+    });
+});
+
+function imageIsLoaded(e) {
+    $('#myImg').attr('src', e.target.result);
+};
+</script>
+
 <div class="container">
 	<br/>
 	<br/>
-	<div class="row" style="height:200px">
-		
-		<div class="col-md-6 col-md-offset-2">
-			<p><h3>Hello, {{username}} </h3></p>
-		</div>
-		<div class="col-md-4" style="padding:15px">
-			<p><a href="#address">Add/Edit Address</a><br/>
-				<a href="#payment">Add/Edit Payment Info</a><br/>
-		</div>
-	</div>
-	<div class = "row" style="overflow-y: scroll; height: auto; border: 1px solid black">
-		<div class="col-md-10 col-md-offset-1">
-		<p>
-		<h3>Comments</h3>
-		</p>
-		<table>
-		</table>
-		</div>
-	</div>
-	<br/>
-	<br/>
-	<div class = "row" style="overflow-y: scroll; height: auto; border: 1px solid black">
-		<div class="col-md-10 col-md-offset-1">
-			<p>
-			<h3>Saved Products</h3>
-			</p>
-			<table>
-			</table>
-		</div>
-	</div>
-	<br/>
-	<br/>
-	<div class="row">
-		<div class="col-md-6 col-md-offset-3">
-			
-				<button type="button" class="btn btn-lg btn-primary btn-block">Purchase History</button>
-			
-		</div>
-	</div>
 	
+	<div class="row" style="height:50px">
+		<div class="col-md-6 col-md-offset-3">
+			<p><h3>Hello {{username}}, Welcome to the profile </h3></p>
+		</div>
+	</div>
+	<div class="row" style="height:200px">
+		<div class="col-md-6 col-md-offset-3" style="padding:15px">
+			<p><a href="#address">Add/Edit Address</a>
+				<a href="#payment" style="float:right">Add/Edit Payment Info</a><br/><br/>
+				<a class="btn btn-lg btn-primary btn-block" href="#comments">My Comments</a><br/>
+				<a class="btn btn-lg btn-primary btn-block" href="#savedProducts">My Saved Products</a><br/>
+				<a class="btn btn-lg btn-primary btn-block" href="#purchase">My Purchase History</a>
+
+
+		</div>
+		<!-- <div class="col-md-6" style="padding:15px">
+			<input type='file' />
+			<br/>
+			<img style="width:200px; height:200px" id="myImg" src="/images/dhwani.jpg" alt="your image" />
+		</div> -->
+	</div>
 </div>

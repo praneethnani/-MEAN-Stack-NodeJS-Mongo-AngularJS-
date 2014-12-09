@@ -102,7 +102,7 @@ ngIdpControllers.controller('registrationCtrl', ['$scope','DataFactory', '$cooki
 			if (json!="success"){
 				alert(json);
 			}else{
-				location.replace("http://localhost:3000/" + "#homePage");  
+				location.replace("http://localhost:3000/" + "#");  
 			}
 		});
 	}
@@ -371,7 +371,7 @@ ngIdpControllers.controller('ProfileCtrl', ['$scope', '$http', 'DataFactory','$c
 	showTopNavBar($scope, DataFactory,$cookieStore);
 	var u = $cookieStore.get('username');
 	$scope.username = u;
-
+	
 }]);
 
 ngIdpControllers.controller('addressCtrl', ['$scope', '$http', 'DataFactory','$cookieStore', function ($scope, $http, DataFactory,  $cookieStore) {
@@ -463,6 +463,26 @@ ngIdpControllers.controller('addCardCtrl', ['$scope', '$http', 'DataFactory','$c
 		});
 		location.replace("http://localhost:3000/" + "#payment");
 	};
+
+}]);
+
+ngIdpControllers.controller('purchaseCtrl', ['$scope', '$http', 'DataFactory','$cookieStore', function ($scope, $http, DataFactory,  $cookieStore) {
+	console.log("Hello from purchaseCtrl");
+	showTopNavBar($scope, DataFactory,$cookieStore);
+	var u = $cookieStore.get('username');
+	$scope.username = u;
+
+	$scope.renderPurchases = function (response) {
+		console.log(response.itemId);
+		$scope.purchases = response.itemId;	
+	};
+
+	$scope.all = function (response) {
+		$http.get("/purchases")
+		.success($scope.renderPurchases);
+	}
+	
+	$scope.all();
 
 }]);
 
