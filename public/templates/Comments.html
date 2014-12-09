@@ -1,29 +1,31 @@
 <div class="container">
-	<h1>{{username}}, This are your comments...</h1>
+	<h1> {{username}}, This are your comments...</h1>
 	<table class="table">
 		<thead>
 			<tr>
 				<td>
-					<input class="form-control" ng-model="comment.comment" />
+					<input class="form-control" ng-model="comment.comment" ng-hide="isActiveUser()"/>
 				</td>
-				<td><button class="btn btn-primary" ng-click="update()">Update</button></td>
+				<td><button class="btn btn-primary" ng-click="update()" ng-hide="isActiveUser()">Update</button></td>
 			</tr>
 		</thead>
 		<tbody>
 			<tr ng-repeat="comment in comments">
 					<td>
-						{{comment.productTitle}} </br> {{comment.comment}}
+						<a href="/#productDetail?id={{comment.itemId}}">{{comment.productTitle}} 
+						</a>
+						</br> {{comment.comment}}
 					</td>
 					<td>
-						<button ng-click="remove(comment._id)" class="btn btn-danger">Remove</button>
-						<button ng-click="select(comment._id)" class="btn btn-warning">Select</button>
+						<button ng-click="remove(comment._id)" class="btn btn-danger" ng-hide="isActiveUser()">Remove</button>
+						<button ng-click="select(comment._id)" class="btn btn-warning" ng-hide="isActiveUser()">Select</button>
 					</td>
 			</tr>
 		</tbody>
 	</table>
 	<div class="row">
 		<div class="col-md-4 col-md-offset-1">
-			<a class="btn btn-lg btn-primary btn-block" href="#profile">Back</a>
+			<a class="btn btn-lg btn-primary btn-block" href="#profile?id={{activeUsername}}" ng-hide="isActiveUser()">Back</a>
 		</div>
 	</div>
 </div>

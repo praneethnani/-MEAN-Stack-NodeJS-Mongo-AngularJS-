@@ -134,11 +134,21 @@ app.get("/comments", function (req, res) {
 });
 
 app.get("/comments/:id", function(req, res){
-  var id = req.params.id;
-  dbComments.comments.findOne({_id : mongojs.ObjectId(id)}, function (err, doc){
-    res.json(doc);
-  });
+	console.log("called" + " " + req); 
+	var id = req.params.id;
+	if(id.length == 24){
+		dbComments.comments.findOne({_id : mongojs.ObjectId(id)}, function (err, doc){
+			   res.json(doc);
+			  });
+	}else
+		{
+		dbComments.comments.find({username : id}, function(err, docs){
+		    console.log(docs);
+		    res.json(docs);
+		  });
+	}
 });
+
 
 app.put("/comments/:id", function(req, res){
   var id = req.params.id; 
@@ -164,6 +174,15 @@ app.get("/savedProducts", function (req, res) {
   dbSavedProducts.savedProducts.find({username : req.session.username}, function(err, docs){
     res.json(docs);
   });
+});
+
+app.get("/savedProducts/:id", function(req, res){
+	var id = req.params.id;
+	  dbSavedProducts.savedProducts.find({username : id}, 
+	    function (err, doc) {
+	      res.json(doc);
+	    })
+	
 });
 
 app.delete("/savedProducts/:id", function(req, res){

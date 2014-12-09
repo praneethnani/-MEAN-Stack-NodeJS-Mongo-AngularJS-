@@ -10,7 +10,8 @@
   <tbody>
       <tr ng-repeat="review in reviews">
           <td>
-            {{review.username}} </br> {{review.comment}}
+            <a href="#profile?id={{review.username}}">{{review.username}}</a>
+             </br> {{review.comment}}
           </td>
       </tr>
     </tbody>

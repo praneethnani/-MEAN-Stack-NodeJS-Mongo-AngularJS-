@@ -13,6 +13,7 @@ $(function () {
 function imageIsLoaded(e) {
     $('#myImg').attr('src', e.target.result);
 };
+
 </script>
 
 <div class="container">
@@ -21,16 +22,16 @@ function imageIsLoaded(e) {
 	
 	<div class="row" style="height:50px">
 		<div class="col-md-6 col-md-offset-3">
-			<p><h3>Hello {{username}}, Welcome to the profile </h3></p>
+			<p><h3>{{username}}, Welcome to the profile </h3></p>
 		</div>
 	</div>
 	<div class="row" style="height:200px">
 		<div class="col-md-6 col-md-offset-3" style="padding:15px">
-			<p><a href="#address">Add/Edit Address</a>
-				<a href="#payment" style="float:right">Add/Edit Payment Info</a><br/><br/>
-				<a class="btn btn-lg btn-primary btn-block" href="#comments">My Comments</a><br/>
-				<a class="btn btn-lg btn-primary btn-block" href="#savedProducts">My Saved Products</a><br/>
-				<a class="btn btn-lg btn-primary btn-block" href="#purchase">My Purchase History</a>
+			<p><a href="#address" ng-hide="isActiveUser({{username}})">Add/Edit Address</a>
+				<a href="#payment" style="float:right" ng-hide="isActiveUser({{username}})">Add/Edit Payment Info</a><br/><br/>
+				<a class="btn btn-lg btn-primary btn-block" href="#comments?id={{username}}">{{username}}'s Comments</a><br/>
+				<a class="btn btn-lg btn-primary btn-block" href="#savedProducts?id={{username}}">{{username}}'s Saved Products</a><br/>
+				<a class="btn btn-lg btn-primary btn-block" href="#purchase" ng-hide="isActiveUser({{username}})">{{username}}'s My Purchase History</a>
 
 
 		</div>

@@ -7,14 +7,14 @@
 						<a href="/#productDetail?id={{savedProduct.itemId}}">{{savedProduct.productTitle}}</a>
 					</td>
 					<td>
-						<button ng-click="remove(savedProduct._id)" class="btn btn-danger">Remove</button>
+						<button ng-click="remove(savedProduct._id)" class="btn btn-danger" ng-hide="isActiveUser()">Remove</button>
 					</td>
 			</tr>
 		</tbody>
 	</table>
 	<div class="row">
 		<div class="col-md-4 col-md-offset-1">
-			<a class="btn btn-lg btn-primary btn-block" href="#profile">Back</a>
+			<a class="btn btn-lg btn-primary btn-block" href="#profile?id={{activeUsername}}" ng-hide="isActiveUser()">Back</a>
 		</div>
 	</div>
 </div>

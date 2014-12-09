@@ -22,11 +22,15 @@ ngIdpControllers.controller('SignInCtrl', ['$scope','DataFactory', '$cookieStore
 		DataFactory.checkPost("/AuthenticateUser", $scope.login)
 		.success(function(json){
 			if (json!="success"){
-				alert(json);
+				alert("Error In Login");
 			}else{
 				var uname = $scope.login.uname;
 				$cookieStore.put('username', uname);
 				location.replace("http://localhost:3000/" + "#homePage");
+				var anchorInnerHtml = document.getElementById('profileID').innerHTML;
+				var innerHtmlValues = anchorInnerHtml.split("?");
+				var newHtml = innerHtmlValues[0] + "?id=" + uname +innerHtmlValues[1]; 
+				document.getElementById('profileID').innerHTML = newHtml;
 			}
 		});
 	}
@@ -56,7 +60,7 @@ ngIdpControllers.controller('HomepageCtrl', ['$scope','DataFactory', '$cookieSto
 
 			if (null != title && null != viewitem) {
 				html.push('<tr><td>' + '<img class="icon" src="' + pic + '" border="0">' + '</td>' + 
-					'<td><td><a href="/#productDetail?id='+ itemId+'" target="_blank">' + title + '</a></td>'+
+					'<td><td><a href="/#productDetail?id='+ itemId+'" >' + title + '</a></td>'+
 					'<td>' + price + ' USD</td></tr>');
 			}
 		}
@@ -206,7 +210,11 @@ ngIdpControllers.controller('commentCtrl', ['$scope', '$http', 'DataFactory','$c
 	console.log("Hello from commentCtrl");
 	showTopNavBar($scope, DataFactory,$cookieStore);
 	var u = $cookieStore.get('username');
-	$scope.username = u;
+	$scope.activeUsername = u;
+	var url = document.URL;
+	var params = url.split("?");
+	console.log(params[1].split("=")[1]);
+	$scope.username = params[1].split("=")[1];
 
 	$scope.renderComments = function (response) {
 		console.log(response);
@@ -238,8 +246,17 @@ ngIdpControllers.controller('commentCtrl', ['$scope', '$http', 'DataFactory','$c
 	};
 
 	$scope.all = function (response) {
-		$http.get("/comments")
+		var url = document.URL;
+		var params = url.split("?");
+		console.log(params[1].split("=")[1] + "from all");
+		var selectedUser = params[1].split("=")[1];
+		console.log($scope.user)
+		$http.get("/comments/" +  selectedUser)
 		.success($scope.renderComments);
+	}
+	
+	$scope.isActiveUser = function(){
+		return u != $scope.username;
 	}
 
 	$scope.all();
@@ -248,6 +265,12 @@ ngIdpControllers.controller('commentCtrl', ['$scope', '$http', 'DataFactory','$c
 ngIdpControllers.controller('savedProductsCtrl', ['$scope', '$http', 'DataFactory','$cookieStore', function ($scope, $http, DataFactory,  $cookieStore) {
 	console.log("Hello from savedProductsCtrl");
 	showTopNavBar($scope, DataFactory,$cookieStore);
+	var u = $cookieStore.get('username');
+	$scope.activeUsername = u;
+	var url = document.URL;
+	var params = url.split("?");
+	$scope.username = params[1].split("=")[1];
+	
 	$scope.renderSavedProducts = function (response) {
 		console.log(response);
 		$scope.savedProducts = response;	
@@ -261,8 +284,15 @@ ngIdpControllers.controller('savedProductsCtrl', ['$scope', '$http', 'DataFactor
 	};
 
 	$scope.all = function (response) {
-		$http.get("/savedProducts")
+		var url = document.URL;
+		var params = url.split("?");
+		var user = params[1].split("=")[1];
+		$http.get("/savedProducts/"+user)
 		.success($scope.renderSavedProducts);
+	}
+	
+	$scope.isActiveUser = function(){
+		return u != $scope.username;
 	}
 	
 	$scope.all();
@@ -370,7 +400,14 @@ ngIdpControllers.controller('ProfileCtrl', ['$scope', '$http', 'DataFactory','$c
 	console.log("Hello from profileCtrl");
 	showTopNavBar($scope, DataFactory,$cookieStore);
 	var u = $cookieStore.get('username');
-	$scope.username = u;
+	$scope.activeUsername = u;
+	var url = document.URL;
+	var params = url.split("?");
+	$scope.username = params[1].split("=")[1];
+	
+	$scope.isActiveUser = function(){
+		return u != $scope.username;
+	}
 	
 }]);
 
@@ -471,6 +508,7 @@ ngIdpControllers.controller('purchaseCtrl', ['$scope', '$http', 'DataFactory','$
 	showTopNavBar($scope, DataFactory,$cookieStore);
 	var u = $cookieStore.get('username');
 	$scope.username = u;
+	$scope.activeUsername = u;
 
 	$scope.renderPurchases = function (response) {
 		console.log(response.itemId);
