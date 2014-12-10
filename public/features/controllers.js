@@ -586,4 +586,100 @@ ngIdpControllers.controller('purchaseCtrl', ['$scope', '$http', 'DataFactory','$
 	$scope.all();
 
 }]);
+ngIdpControllers.controller('shoppingCartCtrl', ['$scope', '$http', 'DataFactory','$cookieStore', function ($scope, $http, DataFactory,  $cookieStore) {
+	console.log("Hello from shoppingCartCtrl");
+	showTopNavBar($scope, DataFactory,$cookieStore);
+	var u = $cookieStore.get('username');
+	$scope.username = u;
 
+	$scope.rendercartProducts = function (response) {
+		console.log(response);
+		$scope.cartproducts = response;	
+	};
+
+    $scope.total = function() {
+        var total = 0;
+   
+        angular.forEach($scope.cartproducts, function(item) {
+        	//console.log(total);
+ 
+            total += item.price;
+        });
+        return total
+    };
+
+    $scope.item_count = function() {
+        var item_count=0;
+        angular.forEach($scope.cartproducts, function(item) {
+  
+        	item_count+=1;
+            
+        });
+        return item_count
+    };
+
+	$scope.remove = function (id) {
+		DataFactory.deleteData("/shoppingcart/" + id)
+		.success(function(response){
+			$scope.all();
+		});
+	};
+
+	$scope.all = function () {
+		$http.get("/shoppingcart")
+		.success($scope.rendercartProducts);
+        $scope.cards();
+        $scope.shippingaddress();
+	}
+
+    $scope.cards=function () {
+		$http.get("/cards")
+		.success($scope.rendercards);
+
+	};
+
+
+	$scope.rendercards= function (response) {
+		//console.log(response);
+		$scope.rendercards = response;	
+	};
+
+	$scope.usethis = function (id) {
+		$http.get("/cards/" + id)
+		.success(function(response){
+		});
+	};
+
+   $scope.shippingaddress=function () {
+		$http.get("/address")
+		.success($scope.renderaddress);
+
+	};
+
+	$scope.renderaddress= function (response) {
+	
+		$scope.rendershipaddress = response[0];	
+	};
+
+	$scope.payout = function () {
+		
+		var username=$cookieStore.get('username')
+		angular.forEach($scope.cartproducts, function(item) {
+
+			var item_json={
+				"itemId":item.itemId,
+				"username":username,
+			};
+			
+			$http.post('/purchases',item_json)
+			.success();
+			
+        });	
+		alert("successfull transaction");
+		DataFactory.deleteData("/removeCart")
+		.success(function(response){
+			console.log(response);
+		});
+	};
+	$scope.all();
+}]);

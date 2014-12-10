@@ -70,6 +70,10 @@ ngIdpApp.config(['$routeProvider',
       when('/purchase', {
         templateUrl: 'templates/PurchaseHistory.html',
         controller: 'purchaseCtrl'
+      }).
+      when('/cart', {
+        templateUrl: 'templates/Cart.html',
+        controller: 'shoppingCartCtrl'
       });
       
     console.log("routeProvider: "+ $routeProvider);

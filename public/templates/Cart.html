@@ -1,0 +1,138 @@
+<div class="container">
+    <h1>{{username}}'s Shopping Cart</h1>
+
+    <table class="table">
+
+        <tbody>
+            <tr ng-repeat="cartproduct in cartproducts">
+                <td>
+                    <a href="#productDetail?id={{cartproduct.itemId}}">{{cartproduct.productTitle}}  :</a>  
+                </td>
+                <td>
+                    <button ng-click="remove(cartproduct._id)" class="btn btn-sm btn-block btn-warning">Remove</butto>
+                    </td>
+                    <td>
+                        <button class="btn btn-sm btn-primary btn-block">{{cartproduct.price | currency}}</button>
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+        <div style="float:right;">
+            Number of Products : {{item_count()}} &nbsp; &nbsp; 
+            <button ng-click="select(comment._id)" class="btn btn-lg btn-danger">Total : {{total() | currency }}</button>
+
+        </div> 
+
+        <div style="clear: both;"></div>
+<br/>
+<br/>
+<hr/>
+  <div>
+
+                <div style="float: left; width:46% ; margin-right:2%;margin-left:2%">
+                    <h4>Shipping Address Details</h4>
+
+                    <table class="table">
+
+                        <tbody>
+                            <tr >
+                               <tr>
+                                <td>
+                                    Street Address:
+                                </td>
+                                <td>
+                                    {{rendershipaddress.streetAddress}} 
+                                </td>
+                            </tr>
+                            <td>AptNumber:</td>
+                            <td>
+                             {{rendershipaddress.aptNumber}}  
+                         </td>
+
+                         <tr>
+                            <td>
+                                City:
+                            </td>
+                            <td>
+                                {{rendershipaddress.city}} 
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                Zipcode:
+                            </td>
+                            <td>
+                                {{rendershipaddress.zip}} 
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>
+                                Phone:
+                            </td>
+                            <td>
+                               {{rendershipaddress.phone}} 
+                           </td>
+                       </tr>
+
+
+                   </tr>
+
+               </tbody>
+
+           </table>
+
+
+       </div>
+  
+
+         
+            <div style="float: right; width:46% ; margin-left:2%;margin-right:2%">
+                <h4>Payment Information</h4>
+                <blockquote>
+                <table class="table">
+
+                    <tbody>
+                        <tr>
+                         <td>
+                             Credit Card Number
+                            </td>
+                            <td>
+                               Expiration Date
+                            </td>
+                        </tr>
+                        <tr ng-repeat="card in rendercards">
+                            <td>
+                                {{card.number}}  
+                            </td>
+                            <td>
+                                {{card.expire}}
+                            </td>
+                            <td>
+                                <button ng-click="usethis(card._id)" class="btn btn-sm btn-block btn-warning">use this</butto>
+                                </td>
+
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+                    </blockquote>
+                </div>
+ </div>
+   <div style="clear: both;"></div>
+<div style="float: right; float: right; width:46% ; margin-left:2%;margin-right:2%">
+   <div class="row" >
+    <div class="col-md-4 col-md-offset-1">
+        <a class="btn btn-lg btn-primary btn-block" href="#homePage" ng-click="payout()">payout</a>
+    </div>
+</div>
+</div>
+
+</div>

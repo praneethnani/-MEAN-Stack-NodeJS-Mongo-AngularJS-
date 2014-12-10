@@ -217,6 +217,32 @@ app.post("/cart", function (req, res) {
   });
 });
 
+app.get("/shoppingcart", function (req, res) {
+    console.log(req.session.username);
+    var username=req.session.username;
+    dbCart.cart.find({username : req.session.username}, function(err, docs){
+      console.log("server response:"+docs);
+      res.json(docs);
+    });
+});
+
+app.delete("/shoppingcart/:id", function(req, res){
+    var id = req.params.id;
+    dbCart.cart.remove({_id : mongojs.ObjectId(id)}, 
+      function (err, doc) {
+        res.json(doc);
+     });
+});
+
+app.delete("/removeCart", function(req, res){
+      console.log("inside");
+      dbCart.cart.remove({username : req.session.username}, 
+        function (err, doc) {
+        console.log(doc);
+          res.json(doc);
+        });
+});
+
 app.put("/updatePassword/:id", function(req, res){
   var newPwd = req.body.newPasswordAdded; 
   var id = req.params.id; 
@@ -299,7 +325,7 @@ app.get("/purchases", function (req, res) {
         //respects the dot notation, multiple keys can be specified in this array
         leftKeys: ["itemId"],
         //This is the key of the document in the right hand document
-        rightKeys: ["itemId"],
+        rightKeys: ["_id"],
         //This is the new subdocument that will be added to the result document
         newKey: "itemId"
     })
@@ -321,13 +347,17 @@ app.get("/purchases", function (req, res) {
 
           }
         }
-        console.log(resultItem);
+        console.log(resultItem + " Let's see");
         res.json(resultItem);
        
     });
 });
 
-
+app.post("/purchases", function (req, res) {
+    dbPurchases.purchases.insert(req.body, function(err, doc) {
+      res.json(doc);
+    });
+});
 app.post("/userReport", function (req, res) {
   var query = {};
   if (req.body.searchKey != undefined){

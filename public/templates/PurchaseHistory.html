@@ -12,9 +12,9 @@
 			</tr>
 		</thead>
 		<tbody>
-			<tr ng-repeat="purchase in purchases">
+			<tr ng-repeat="purchase in purchases track by $index">
 					<td>
-						<a href="/#productDetail?id={{purchase.itemId}}">{{purchase.productTitle}}</a>
+						<a href="/#productDetail?id={{purchase._id}}">{{purchase.productTitle}}</a>
 					</td>
 					<td>
 						<b>{{purchase.price}}</b>
